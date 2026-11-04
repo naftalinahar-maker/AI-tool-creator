@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GENRE_LABELS, Movie, MOOD_LABELS, Genre, Mood } from "@/lib/types";
+import { generateScriptOffline } from "@/lib/scriptGenerator";
 
 interface MovieFormProps {
   onGenerated: (movie: Movie, source: "claude" | "offline") => void;
@@ -27,13 +28,31 @@ export default function MovieForm({ onGenerated }: MovieFormProps) {
     }
     setLoading(true);
     setError(null);
+    const movieRequest = { title, genre, mood, plotIdea, numScenes };
     try {
-      const res = await fetch("/api/generate-script", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, genre, mood, plotIdea, numScenes }),
-      });
-      const data = await res.json();
+      let res: Response | null = null;
+      try {
+        res = await fetch("/api/generate-script", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(movieRequest),
+        });
+      } catch {
+        res = null;
+      }
+      const data = res && (res.headers.get("content-type") ?? "").includes("application/json") ? await res.json() : null;
+      if (!res || !data) {
+        // No API server (e.g. a static deployment): generate the script in the browser.
+        onGenerated(
+          generateScriptOffline({
+            ...movieRequest,
+            title: title.trim().slice(0, 80) || "סרט ללא שם",
+            plotIdea: plotIdea.trim().slice(0, 600),
+          }),
+          "offline"
+        );
+        return;
+      }
       if (!res.ok) {
         throw new Error(data.error || "משהו השתבש ביצירת התסריט.");
       }

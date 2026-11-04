@@ -6,6 +6,7 @@ import { MOOD_PROFILES } from "@/lib/mood";
 import { DecoShape, generateShapes } from "@/lib/canvasArt";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
 import { useProceduralScore } from "@/hooks/useProceduralScore";
+import { saveFile } from "@/lib/saveFile";
 
 const CANVAS_W = 1280;
 const CANVAS_H = 720;
@@ -167,7 +168,7 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
   const [narrationOn, setNarrationOn] = useState(true);
   const [musicOn, setMusicOn] = useState(true);
   const [exporting, setExporting] = useState(false);
-  const [exportUrl, setExportUrl] = useState<string | null>(null);
+  const [exportBlob, setExportBlob] = useState<Blob | null>(null);
 
   const speech = useSpeechSynthesis();
   const score = useProceduralScore();
@@ -318,7 +319,7 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
 
     setExporting(true);
     exportingRef.current = true;
-    setExportUrl(null);
+    setExportBlob(null);
 
     const initialMood: Mood = movie.scenes[0]?.mood ?? "epic";
     score.start(initialMood);
@@ -344,7 +345,7 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
     };
     recorder.onstop = () => {
       const blob = new Blob(chunksRef.current, { type: "video/webm" });
-      setExportUrl(URL.createObjectURL(blob));
+      setExportBlob(blob);
       setExporting(false);
       score.setMuted(!musicOn);
     };
@@ -372,12 +373,7 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
       ]),
     ];
     const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${sanitizeFilename(movie.title)}-תסריט.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    void saveFile(`${sanitizeFilename(movie.title)}-תסריט.txt`, blob);
   }, [movie]);
 
   useEffect(() => {
@@ -481,14 +477,13 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
         <button onClick={onBack} className="rounded-full px-4 py-2 text-zinc-400 underline-offset-4 hover:underline">
           חזרה לעריכת התסריט
         </button>
-        {exportUrl && (
-          <a
-            href={exportUrl}
-            download={`${sanitizeFilename(movie.title)}.webm`}
+        {exportBlob && (
+          <button
+            onClick={() => void saveFile(`${sanitizeFilename(movie.title)}.webm`, exportBlob)}
             className="rounded-full bg-white px-5 py-2 font-medium text-zinc-900 transition hover:bg-zinc-200"
           >
             הורדת הסרט המוכן ⬇
-          </a>
+          </button>
         )}
       </div>
 
