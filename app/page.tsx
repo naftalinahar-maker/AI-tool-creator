@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Movie } from "@/lib/types";
 import MovieForm from "@/components/MovieForm";
 import Storyboard from "@/components/Storyboard";
@@ -53,6 +54,11 @@ export default function Home() {
 
         <footer className="mt-6 text-center text-xs text-zinc-600" dir="rtl">
           כל היצירה — תסריט, ויזואלים, קריינות ומוזיקה — מופקת ומורכבת ישירות בדפדפן.
+          <div className="mt-2">
+            <Link href="/tanks" className="text-emerald-500 hover:text-emerald-400">
+              🛡️ הפסקה? שחקו בקרב טנקים
+            </Link>
+          </div>
         </footer>
       </div>
     </div>
