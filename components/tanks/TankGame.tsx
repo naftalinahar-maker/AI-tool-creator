@@ -5,18 +5,13 @@ import { Controls, Game, Hud, Mode, createGame, hud, render, update, WIDTH, HEIG
 import { TankSounds } from "@/lib/tanks/sound";
 
 type Screen = "menu" | "playing" | "paused" | "over";
-type TouchKey = keyof Controls;
+type TouchKey = Exclude<keyof Controls, "aimX" | "aimY">;
 
-const P1_KEYS: Record<string, TouchKey> = { KeyW: "up", KeyS: "down", KeyA: "left", KeyD: "right", Space: "fire" };
-const P2_KEYS: Record<string, TouchKey> = {
-  ArrowUp: "up",
-  ArrowDown: "down",
-  ArrowLeft: "left",
-  ArrowRight: "right",
-  Enter: "fire",
-  NumpadEnter: "fire",
-  Slash: "fire",
-};
+type MoveKey = Exclude<keyof Controls, "aimX" | "aimY">;
+// Player 1: arrows to move + mouse to aim and fire. Player 2 (two-player modes): WASD + Space.
+// In solo mode WASD and Space also drive player 1.
+const ARROW_KEYS: Record<string, MoveKey> = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right" };
+const WASD_KEYS: Record<string, MoveKey> = { KeyW: "up", KeyS: "down", KeyA: "left", KeyD: "right", Space: "fire" };
 const BLOCKED = new Set(["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter"]);
 const BEST_KEY = "tank-battle-best";
 
@@ -53,6 +48,7 @@ export default function TankGame() {
   const touchRef = useRef<Controls>(emptyControls());
   const soundRef = useRef<TankSounds | null>(null);
   const screenRef = useRef<Screen>("menu");
+  const mouseRef = useRef<{ x: number; y: number; down: boolean; active: boolean }>({ x: 0, y: 0, down: false, active: false });
 
   const [screen, setScreenState] = useState<Screen>("menu");
   const [hudState, setHud] = useState<Hud | null>(null);
@@ -71,6 +67,8 @@ export default function TankGame() {
       setBest(readBest());
       gameRef.current = createGame(mode);
       keysRef.current.clear();
+      mouseRef.current.active = false;
+      mouseRef.current.down = false;
       setHud(hud(gameRef.current));
       setScreen("playing");
       canvasRef.current?.focus();
@@ -84,7 +82,7 @@ export default function TankGame() {
       const s = screenRef.current;
       if (s === "playing" || s === "paused") {
         if (BLOCKED.has(e.code)) e.preventDefault();
-        if (e.code === "KeyP" || e.code === "Escape") {
+        if (e.code === "Escape" || e.code === "KeyP") {
           setScreen(s === "playing" ? "paused" : "playing");
           return;
         }
@@ -94,6 +92,7 @@ export default function TankGame() {
     const up = (e: KeyboardEvent) => keysRef.current.delete(e.code);
     const blur = () => {
       keysRef.current.clear();
+      mouseRef.current.down = false;
       if (screenRef.current === "playing") setScreen("paused");
     };
     window.addEventListener("keydown", down);
@@ -125,9 +124,15 @@ export default function TankGame() {
         const twoPlayers = g.mode !== "solo";
         const controls = [emptyControls(), emptyControls()];
         for (const code of keys) {
-          if (P1_KEYS[code]) controls[0][P1_KEYS[code]] = true;
-          if (P2_KEYS[code]) controls[twoPlayers ? 1 : 0][P2_KEYS[code]] = true;
+          if (ARROW_KEYS[code]) controls[0][ARROW_KEYS[code]] = true;
+          if (WASD_KEYS[code]) controls[twoPlayers ? 1 : 0][WASD_KEYS[code]] = true;
         }
+        const mouse = mouseRef.current;
+        if (mouse.active) {
+          controls[0].aimX = mouse.x;
+          controls[0].aimY = mouse.y;
+        }
+        if (mouse.down) controls[0].fire = true;
         const tc = touchRef.current;
         for (const k of Object.keys(tc) as TouchKey[]) if (tc[k]) controls[0][k] = true;
 
@@ -156,6 +161,15 @@ export default function TankGame() {
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
   }, [setScreen]);
+
+  const updateMouse = (e: React.PointerEvent<HTMLCanvasElement>, press: boolean) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const m = mouseRef.current;
+    m.x = ((e.clientX - rect.left) / rect.width) * WIDTH;
+    m.y = ((e.clientY - rect.top) / rect.height) * HEIGHT;
+    m.active = true;
+    if (press && e.button === 0) m.down = true;
+  };
 
   const toggleMute = () => {
     const next = !muted;
@@ -237,7 +251,16 @@ export default function TankGame() {
           width={WIDTH}
           height={HEIGHT}
           tabIndex={0}
-          className="block h-auto w-full bg-[#3f4a32] outline-none"
+          className="block h-auto w-full cursor-crosshair touch-none bg-[#3f4a32] outline-none"
+          onPointerMove={(e) => updateMouse(e, false)}
+          onPointerDown={(e) => {
+            e.preventDefault();
+            canvasRef.current?.focus();
+            updateMouse(e, true);
+          }}
+          onPointerUp={() => (mouseRef.current.down = false)}
+          onPointerLeave={() => (mouseRef.current.down = false)}
+          onContextMenu={(e) => e.preventDefault()}
         />
 
         {screen !== "playing" && (
@@ -325,9 +348,9 @@ export default function TankGame() {
             <span />
             {touchButton("up", "▲")}
             <span />
-            {touchButton("left", "⟲")}
+            {touchButton("left", "◀")}
             {touchButton("down", "▼")}
-            {touchButton("right", "⟳")}
+            {touchButton("right", "▶")}
           </div>
           {touchButton("fire", "💥", "h-20 w-20 rounded-full bg-red-600/60")}
         </div>
@@ -341,16 +364,16 @@ function Instructions() {
     <div className="grid w-full gap-2 rounded-xl bg-zinc-900/80 p-3 text-right text-xs text-zinc-300 sm:grid-cols-2">
       <div>
         <div className="mb-1 font-bold text-blue-400">שחקן 1</div>
-        <div>תנועה: W / S · סיבוב: A / D</div>
-        <div>ירי: רווח</div>
+        <div>תנועה: מקשי החיצים</div>
+        <div>כיוון: תזוזת העכבר · ירי: לחיצה</div>
       </div>
       <div>
         <div className="mb-1 font-bold text-amber-400">שחקן 2</div>
-        <div>תנועה וסיבוב: מקשי החיצים</div>
-        <div>ירי: Enter</div>
+        <div>תנועה: W A S D</div>
+        <div>ירי: רווח</div>
       </div>
       <div className="sm:col-span-2 text-zinc-400">
-        השהיה: P / Esc · בונוסים: <span className="text-cyan-300">S</span> מגן, <span className="text-yellow-300">»</span> ירי
+        השהיה: Esc · בונוסים: <span className="text-cyan-300">S</span> מגן, <span className="text-yellow-300">»</span> ירי
         מהיר, <span className="text-green-300">+</span> תיקון, <span className="text-pink-300">3</span> ירי משולש
       </div>
     </div>

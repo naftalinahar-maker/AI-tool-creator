@@ -25,6 +25,9 @@ export interface Controls {
   left: boolean;
   right: boolean;
   fire: boolean;
+  /** Aim point in board pixels (mouse); when absent the turret follows the hull. */
+  aimX?: number;
+  aimY?: number;
 }
 
 interface AiState {
@@ -669,11 +672,23 @@ function updateBot(g: Game, t: Tank, dt: number) {
 // ---------- update ----------
 
 function updatePlayer(g: Game, t: Tank, c: Controls, dt: number) {
-  const turn = (c.right ? 1 : 0) - (c.left ? 1 : 0);
-  t.angle += turn * 3.2 * dt;
-  const throttle = (c.up ? 1 : 0) - (c.down ? 0.6 : 0);
-  if (throttle) moveTank(g, t, throttle * t.speed * dt);
-  t.turret = t.angle;
+  // Direct movement: the arrows give a direction, the hull turns to face it and the tank drives that way.
+  const dx = (c.right ? 1 : 0) - (c.left ? 1 : 0);
+  const dy = (c.down ? 1 : 0) - (c.up ? 1 : 0);
+  if (dx || dy) {
+    const dir = Math.atan2(dy, dx);
+    t.angle = rotateToward(t.angle, dir, 12 * dt);
+    const diff = Math.abs(angDiff(t.angle, dir));
+    // Reversing direction flips the hull quickly instead of driving sideways.
+    if (diff < 0.6) {
+      const saved = t.angle;
+      t.angle = dir;
+      moveTank(g, t, t.speed * dt);
+      t.angle = saved;
+    }
+  }
+  if (c.aimX !== undefined && c.aimY !== undefined) t.turret = Math.atan2(c.aimY - t.y, c.aimX - t.x);
+  else t.turret = rotateToward(t.turret, t.angle, 10 * dt);
   if (c.fire && t.cooldown <= 0) shoot(g, t);
 }
 
