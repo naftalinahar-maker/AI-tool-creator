@@ -1,4 +1,4 @@
-import { Genre, GENRE_LABELS, Movie, MovieRequest, Scene } from "./types";
+import { Genre, GENRE_LABELS, MAX_CLIP_SECONDS, MIN_CLIP_SECONDS, Movie, MovieRequest, Scene } from "./types";
 
 type Beat = "opening" | "rising" | "twist" | "climax" | "resolution";
 
@@ -382,7 +382,7 @@ export function generateScriptOffline(req: MovieRequest): Movie {
     const captionIdx = beatCounters[beat]++;
     const caption = pickCycled(CAPTIONS[beat], captionOrders[beat], captionIdx);
     const narration = narrationFor(beat, location, conflict, req.plotIdea, req.title);
-    const duration = Math.max(6, Math.min(14, 6 + narration.length / 12));
+    const duration = Math.max(MIN_CLIP_SECONDS, Math.min(MAX_CLIP_SECONDS, 5 + narration.length / 20));
 
     return {
       id: `scene-${i + 1}`,

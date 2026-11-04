@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Movie, Mood, Scene, GENRE_LABELS } from "@/lib/types";
+import { Movie, Mood, Scene, GENRE_LABELS, MAX_CLIP_SECONDS, MIN_CLIP_SECONDS } from "@/lib/types";
 import { MOOD_PROFILES } from "@/lib/mood";
 import { DecoShape, generateShapes } from "@/lib/canvasArt";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
@@ -11,8 +11,8 @@ import { saveFile } from "@/lib/saveFile";
 const CANVAS_W = 1280;
 const CANVAS_H = 720;
 const INTRO_DURATION = 2.5;
-const MIN_SCENE_DURATION = 4;
-const MAX_SCENE_DURATION = 20;
+const MIN_SCENE_DURATION = MIN_CLIP_SECONDS;
+const MAX_SCENE_DURATION = MAX_CLIP_SECONDS;
 
 function clampDuration(d: number): number {
   if (!Number.isFinite(d)) return MIN_SCENE_DURATION;
@@ -81,14 +81,54 @@ function drawTitleCard(
   ctx.restore();
 }
 
+type SceneMedia = HTMLImageElement | HTMLVideoElement;
+
+function mediaReady(m: SceneMedia | undefined): m is SceneMedia {
+  if (!m) return false;
+  if (m instanceof HTMLVideoElement) return m.readyState >= 2 && m.videoWidth > 0;
+  return m.complete && m.naturalWidth > 0;
+}
+
+/** Draw media "object-fit: cover" into the canvas, with an optional zoom. */
+function drawCover(ctx: CanvasRenderingContext2D, m: SceneMedia, zoom: number, panX: number) {
+  const w = m instanceof HTMLVideoElement ? m.videoWidth : m.naturalWidth;
+  const h = m instanceof HTMLVideoElement ? m.videoHeight : m.naturalHeight;
+  const scale = Math.max(CANVAS_W / w, CANVAS_H / h) * zoom;
+  const dw = w * scale;
+  const dh = h * scale;
+  ctx.drawImage(m, (CANVAS_W - dw) / 2 + panX, (CANVAS_H - dh) / 2, dw, dh);
+}
+
 function drawScene(
   ctx: CanvasRenderingContext2D,
   scene: Scene,
   progress: number,
-  shapes: DecoShape[]
+  shapes: DecoShape[],
+  media?: SceneMedia
 ) {
   const profile = MOOD_PROFILES[scene.mood];
   const eased = easeInOutSine(progress);
+
+  if (mediaReady(media)) {
+    if (media instanceof HTMLVideoElement) {
+      drawCover(ctx, media, 1, 0);
+    } else {
+      // Ken Burns move over the AI still.
+      drawCover(ctx, media, 1.04 + 0.12 * eased, Math.sin(progress * Math.PI) * 24 - 12);
+    }
+    const shade = ctx.createLinearGradient(0, CANVAS_H * 0.55, 0, CANVAS_H);
+    shade.addColorStop(0, "rgba(0,0,0,0)");
+    shade.addColorStop(1, "rgba(0,0,0,0.65)");
+    ctx.fillStyle = shade;
+    ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+    const top = ctx.createLinearGradient(0, 0, 0, 90);
+    top.addColorStop(0, "rgba(0,0,0,0.5)");
+    top.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = top;
+    ctx.fillRect(0, 0, CANVAS_W, 90);
+    drawSceneText(ctx, scene, progress);
+    return;
+  }
 
   ctx.save();
   const scale = 1 + 0.12 * eased;
@@ -119,6 +159,10 @@ function drawScene(
   ctx.globalAlpha = 1;
   ctx.restore();
 
+  drawSceneText(ctx, scene, progress);
+}
+
+function drawSceneText(ctx: CanvasRenderingContext2D, scene: Scene, progress: number) {
   ctx.save();
   ctx.direction = "rtl";
   ctx.textAlign = "right";
@@ -181,6 +225,64 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
     return m;
   }, [movie]);
 
+  const mediaByScene = useMemo(() => {
+    const m = new Map<string, SceneMedia>();
+    if (typeof document === "undefined") return m;
+    movie.scenes.forEach((s) => {
+      if (!s.mediaUrl) return;
+      if (s.mediaKind === "video") {
+        const v = document.createElement("video");
+        v.src = s.mediaUrl;
+        v.muted = true;
+        v.playsInline = true;
+        v.preload = "auto";
+        v.load();
+        m.set(s.id, v);
+      } else {
+        const img = new Image();
+        img.src = s.mediaUrl;
+        m.set(s.id, img);
+      }
+    });
+    return m;
+  }, [movie]);
+
+  /** Keep the active scene's video in step with the movie clock. */
+  const syncVideos = useCallback(
+    (playing: boolean) => {
+      const { segment } = findSegment(timeline, currentTimeRef.current);
+      const activeId = segment.kind === "scene" ? segment.scene?.id : undefined;
+      mediaByScene.forEach((m, id) => {
+        if (!(m instanceof HTMLVideoElement)) return;
+        if (id !== activeId) {
+          if (!m.paused) m.pause();
+          return;
+        }
+        const offset = Math.min(currentTimeRef.current - segment.start, (m.duration || Infinity) - 0.05);
+        if (Math.abs(m.currentTime - offset) > 0.35) m.currentTime = Math.max(0, offset);
+        if (playing && m.paused) m.play().catch(() => {});
+        if (!playing && !m.paused) m.pause();
+      });
+    },
+    [timeline, mediaByScene]
+  );
+
+  // Redraw the paused frame once AI media finishes loading or seeking.
+  const redrawRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    const redraw = () => {
+      if (!playingRef.current) redrawRef.current();
+    };
+    const events = ["load", "loadeddata", "seeked"];
+    mediaByScene.forEach((m) => events.forEach((e) => m.addEventListener(e, redraw)));
+    return () => {
+      mediaByScene.forEach((m) => {
+        events.forEach((e) => m.removeEventListener(e, redraw));
+        if (m instanceof HTMLVideoElement) m.pause();
+      });
+    };
+  }, [mediaByScene]);
+
   useEffect(() => {
     narrationOnRef.current = narrationOn;
   }, [narrationOn]);
@@ -203,7 +305,13 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
     if (segment.kind === "intro") {
       drawTitleCard(ctx, movie.title, GENRE_LABELS[movie.genre], fadeAlpha(progress, 0.3, 0.75));
     } else if (segment.kind === "scene" && segment.scene) {
-      drawScene(ctx, segment.scene, progress, shapesByScene.get(segment.scene.id) ?? []);
+      drawScene(
+        ctx,
+        segment.scene,
+        progress,
+        shapesByScene.get(segment.scene.id) ?? [],
+        mediaByScene.get(segment.scene.id)
+      );
     } else {
       drawTitleCard(ctx, "סוף", `נוצר עם AI Movie Studio · ${movie.title}`, fadeAlpha(progress, 0.25, 0.8));
     }
@@ -214,19 +322,24 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
     ctx.fillStyle = "rgba(255,255,255,0.85)";
     ctx.fillRect(0, CANVAS_H - 4, CANVAS_W * (currentTimeRef.current / totalDuration), 4);
     ctx.restore();
-  }, [timeline, movie, shapesByScene, totalDuration]);
+  }, [timeline, movie, shapesByScene, mediaByScene, totalDuration]);
+
+  useEffect(() => {
+    redrawRef.current = drawAtCurrentTime;
+  }, [drawAtCurrentTime]);
 
   const handleReachEnd = useCallback(() => {
     playingRef.current = false;
     setIsPlaying(false);
     score.stop();
     speech.stop();
+    mediaByScene.forEach((m) => m instanceof HTMLVideoElement && m.pause());
     if (exportingRef.current) {
       exportingRef.current = false;
       recorderRef.current?.stop();
       narrationOnRef.current = narrationOn;
     }
-  }, [score, speech, narrationOn]);
+  }, [score, speech, narrationOn, mediaByScene]);
 
   const tick = useCallback(
     (now: number) => {
@@ -251,13 +364,14 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
         if (narrationOnRef.current) speech.speak(segment.scene!.narration);
       }
 
+      syncVideos(true);
       drawAtCurrentTime();
       frameCounterRef.current += 1;
       if (frameCounterRef.current % 6 === 0) setDisplayTime(currentTimeRef.current);
 
       rafRef.current = requestAnimationFrame(tickRef.current);
     },
-    [timeline, totalDuration, drawAtCurrentTime, handleReachEnd, score, speech]
+    [timeline, totalDuration, drawAtCurrentTime, handleReachEnd, score, speech, syncVideos]
   );
 
   useEffect(() => {
@@ -287,7 +401,8 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     score.stop();
     speech.stop();
-  }, [score, speech]);
+    syncVideos(false);
+  }, [score, speech, syncVideos]);
 
   const restart = useCallback(() => {
     pause();
@@ -302,9 +417,10 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
       currentTimeRef.current = value;
       lastSceneIndexRef.current = null;
       setDisplayTime(value);
+      syncVideos(playingRef.current);
       drawAtCurrentTime();
     },
-    [drawAtCurrentTime]
+    [drawAtCurrentTime, syncVideos]
   );
 
   const handleExport = useCallback(() => {

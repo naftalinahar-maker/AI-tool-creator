@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Movie } from "@/lib/types";
+import { Movie, Scene } from "@/lib/types";
 import MovieForm from "@/components/MovieForm";
 import Storyboard from "@/components/Storyboard";
 import MoviePlayer from "@/components/MoviePlayer";
@@ -17,6 +17,12 @@ export default function Home() {
     setMovie(newMovie);
     setSource(newSource);
     setStage("storyboard");
+  }
+
+  function patchScene(id: string, patch: Partial<Scene>) {
+    setMovie((prev) =>
+      prev ? { ...prev, scenes: prev.scenes.map((s) => (s.id === id ? { ...s, ...patch } : s)) } : prev
+    );
   }
 
   function handleStartOver() {
@@ -42,7 +48,7 @@ export default function Home() {
             <Storyboard
               movie={movie}
               source={source}
-              onChange={setMovie}
+              onPatchScene={patchScene}
               onConfirm={() => setStage("player")}
               onStartOver={handleStartOver}
             />

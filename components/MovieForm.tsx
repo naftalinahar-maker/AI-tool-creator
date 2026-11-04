@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { GENRE_LABELS, Movie, MOOD_LABELS, Genre, Mood } from "@/lib/types";
-import { generateScriptOffline } from "@/lib/scriptGenerator";
+import { generateIdea, generateScreenplay } from "@/lib/aiClient";
 
 interface MovieFormProps {
   onGenerated: (movie: Movie, source: "claude" | "offline") => void;
@@ -18,7 +18,27 @@ export default function MovieForm({ onGenerated }: MovieFormProps) {
   const [plotIdea, setPlotIdea] = useState("");
   const [numScenes, setNumScenes] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [ideaLoading, setIdeaLoading] = useState(false);
+  const [ideaNote, setIdeaNote] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  async function handleIdea() {
+    setIdeaLoading(true);
+    setError(null);
+    setIdeaNote(null);
+    try {
+      const { idea, source } = await generateIdea({ genre, mood });
+      setTitle(idea.title);
+      setGenre(idea.genre);
+      setMood(idea.mood);
+      setPlotIdea(idea.plotIdea);
+      setIdeaNote(source === "claude" ? "✨ רעיון שנוצר עם Claude" : "💡 רעיון מהמחולל המובנה (Claude לא זמין כאן)");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "יצירת הרעיון נכשלה.");
+    } finally {
+      setIdeaLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -28,35 +48,15 @@ export default function MovieForm({ onGenerated }: MovieFormProps) {
     }
     setLoading(true);
     setError(null);
-    const movieRequest = { title, genre, mood, plotIdea, numScenes };
     try {
-      let res: Response | null = null;
-      try {
-        res = await fetch("/api/generate-script", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(movieRequest),
-        });
-      } catch {
-        res = null;
-      }
-      const data = res && (res.headers.get("content-type") ?? "").includes("application/json") ? await res.json() : null;
-      if (!res || !data) {
-        // No API server (e.g. a static deployment): generate the script in the browser.
-        onGenerated(
-          generateScriptOffline({
-            ...movieRequest,
-            title: title.trim().slice(0, 80) || "סרט ללא שם",
-            plotIdea: plotIdea.trim().slice(0, 600),
-          }),
-          "offline"
-        );
-        return;
-      }
-      if (!res.ok) {
-        throw new Error(data.error || "משהו השתבש ביצירת התסריט.");
-      }
-      onGenerated(data.movie as Movie, data.source);
+      const { movie, source } = await generateScreenplay({
+        title: title.trim().slice(0, 80) || "סרט ללא שם",
+        genre,
+        mood,
+        plotIdea: plotIdea.trim().slice(0, 600),
+        numScenes,
+      });
+      onGenerated(movie, source);
     } catch (err) {
       setError(err instanceof Error ? err.message : "משהו השתבש ביצירת התסריט.");
     } finally {
@@ -110,7 +110,17 @@ export default function MovieForm({ onGenerated }: MovieFormProps) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-zinc-300">רעיון העלילה</label>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <label className="text-sm font-medium text-zinc-300">רעיון העלילה</label>
+          <button
+            type="button"
+            onClick={handleIdea}
+            disabled={ideaLoading || loading}
+            className="rounded-full border border-amber-500/60 bg-amber-500/10 px-4 py-1.5 text-sm font-medium text-amber-300 transition hover:bg-amber-500/20 disabled:opacity-50"
+          >
+            {ideaLoading ? "חושב על רעיון..." : "💡 תן לי רעיון בAI"}
+          </button>
+        </div>
         <textarea
           value={plotIdea}
           onChange={(e) => setPlotIdea(e.target.value)}
@@ -135,6 +145,8 @@ export default function MovieForm({ onGenerated }: MovieFormProps) {
         />
       </div>
 
+      {ideaNote && <p className="-mt-3 text-xs text-amber-300/80">{ideaNote}</p>}
+
       {error && <p className="text-sm text-red-400">{error}</p>}
 
       <button
@@ -142,7 +154,7 @@ export default function MovieForm({ onGenerated }: MovieFormProps) {
         disabled={loading}
         className="mt-2 rounded-full bg-violet-600 px-6 py-3 font-semibold text-white transition hover:bg-violet-500 disabled:opacity-50"
       >
-        {loading ? "יוצר תסריט..." : "צור תסריט בעזרת AI"}
+        {loading ? "כותב תסריט... (עם Claude זה יכול לקחת עד דקה)" : "צור תסריט בעזרת AI"}
       </button>
     </form>
   );
