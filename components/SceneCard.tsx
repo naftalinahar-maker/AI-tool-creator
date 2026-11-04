@@ -58,6 +58,12 @@ export default function SceneCard({ scene, index, onChange }: SceneCardProps) {
           max={20}
           value={scene.duration}
           onChange={(e) => onChange({ ...scene, duration: Number(e.target.value) })}
+          onBlur={() =>
+            onChange({
+              ...scene,
+              duration: Math.min(20, Math.max(4, Number.isFinite(scene.duration) ? scene.duration : 4)),
+            })
+          }
           className="w-20 rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-sm text-zinc-200 focus:border-violet-500 focus:outline-none"
         />
       </div>

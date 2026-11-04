@@ -11,10 +11,11 @@ export function useSpeechSynthesis() {
 
     const pickVoice = () => {
       const voices = window.speechSynthesis.getVoices();
+      // Only use an explicit voice if it speaks Hebrew. Forcing an English voice
+      // onto Hebrew narration makes it silent or garbled, so otherwise we just
+      // set lang="he-IL" and let the browser pick.
       voiceRef.current =
-        voices.find((v) => v.lang?.toLowerCase().startsWith("he")) ??
-        voices.find((v) => v.default) ??
-        voices[0] ??
+        voices.find((v) => v.lang?.toLowerCase().startsWith("he") || v.lang?.toLowerCase().startsWith("iw")) ??
         null;
     };
 

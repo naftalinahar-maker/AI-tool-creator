@@ -10,6 +10,13 @@ import { useProceduralScore } from "@/hooks/useProceduralScore";
 const CANVAS_W = 1280;
 const CANVAS_H = 720;
 const INTRO_DURATION = 2.5;
+const MIN_SCENE_DURATION = 4;
+const MAX_SCENE_DURATION = 20;
+
+function clampDuration(d: number): number {
+  if (!Number.isFinite(d)) return MIN_SCENE_DURATION;
+  return Math.min(MAX_SCENE_DURATION, Math.max(MIN_SCENE_DURATION, d));
+}
 const OUTRO_DURATION = 3.5;
 
 interface Segment {
@@ -26,8 +33,9 @@ function buildTimeline(movie: Movie): Segment[] {
   segments.push({ kind: "intro", start: t, duration: INTRO_DURATION });
   t += INTRO_DURATION;
   movie.scenes.forEach((scene, i) => {
-    segments.push({ kind: "scene", start: t, duration: scene.duration, scene, sceneIndex: i });
-    t += scene.duration;
+    const duration = clampDuration(scene.duration);
+    segments.push({ kind: "scene", start: t, duration, scene, sceneIndex: i });
+    t += duration;
   });
   segments.push({ kind: "outro", start: t, duration: OUTRO_DURATION });
   return segments;
@@ -257,6 +265,12 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
 
   const play = useCallback(() => {
     if (playingRef.current) return;
+    // Pressing play after the movie ended starts it again from the beginning.
+    if (currentTimeRef.current >= totalDuration) {
+      currentTimeRef.current = 0;
+      lastSceneIndexRef.current = null;
+      setDisplayTime(0);
+    }
     playingRef.current = true;
     setIsPlaying(true);
     lastTsRef.current = null;
@@ -264,7 +278,7 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
     const mood: Mood = segment.scene?.mood ?? movie.scenes[0]?.mood ?? "epic";
     score.start(mood);
     rafRef.current = requestAnimationFrame(tick);
-  }, [timeline, movie, score, tick]);
+  }, [timeline, totalDuration, movie, score, tick]);
 
   const pause = useCallback(() => {
     playingRef.current = false;
@@ -408,6 +422,7 @@ export default function MoviePlayer({ movie, onBack }: MoviePlayerProps) {
         step={0.1}
         value={displayTime}
         onChange={(e) => handleScrub(Number(e.target.value))}
+        dir="ltr"
         disabled={exporting}
         className="w-full accent-violet-500 disabled:opacity-40"
       />
