@@ -121,9 +121,10 @@ footer a{color:var(--gold-soft)}
   .wrap{padding:0 18px}
   .hero{grid-template-columns:1fr;gap:28px;padding:18px 18px 44px}
   .hero header{grid-row:1}
+  .hero header span{display:none}
   .photo{grid-row:2;height:56vh;border-radius:20px 20px 20px 120px}
   .hero .text{grid-row:3}
-  .when div{flex:1 1 40%}
+  .when div{flex:1 1 26%}
   .when div:first-child{flex-basis:100%}
   .hero .btn{display:block;text-align:center}
   .form-sec{padding:48px 0}
