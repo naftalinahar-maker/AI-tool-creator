@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>כיוון ב: בשורה</title>
+<style>
+@font-face{font-family:Frank;font-weight:500;src:url(fonts/frank-ruhl-libre-hebrew-500-normal.woff2) format("woff2")}
+@font-face{font-family:Frank;font-weight:700;src:url(fonts/frank-ruhl-libre-hebrew-700-normal.woff2) format("woff2")}
+@font-face{font-family:Frank;font-weight:900;src:url(fonts/frank-ruhl-libre-hebrew-900-normal.woff2) format("woff2")}
+@font-face{font-family:Assistant;font-weight:400;src:url(fonts/assistant-hebrew-400-normal.woff2) format("woff2")}
+@font-face{font-family:Assistant;font-weight:600;src:url(fonts/assistant-hebrew-600-normal.woff2) format("woff2")}
+@font-face{font-family:Assistant;font-weight:700;src:url(fonts/assistant-hebrew-700-normal.woff2) format("woff2")}
+:root{--teal:#0B3B3F;--gold:#B88E35;--violet:#6B6FE6;--violet-soft:#E9EAFD;--paper:#FAF7F0;--ink:#1A2224}
+*{box-sizing:border-box;margin:0}
+body{font-family:Assistant,system-ui,sans-serif;background:var(--paper);color:var(--ink)}
+.wrap{max-width:1360px;margin:0 auto;padding:36px 64px 64px;min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;padding-bottom:22px;border-bottom:1px solid #DDD6C6}
+header img{height:20px}
+header span{font-size:16px;font-weight:600;color:var(--teal)}
+.hero{flex:1;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center;padding-top:48px}
+.kicker{font-weight:700;font-size:17px;color:var(--violet)}
+h1{font-family:Frank,serif;font-weight:900;color:var(--teal);font-size:clamp(46px,6.6vw,104px);line-height:1;margin:18px 0 26px}
+.rule{width:88px;height:3px;background:var(--gold);margin-bottom:26px}
+.sub{font-family:Frank,serif;font-weight:500;font-size:clamp(21px,2vw,30px);line-height:1.4;max-width:24ch;color:#2E3B3D}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:28px;margin-top:40px}
+.cta{background:var(--teal);color:#fff;font-weight:700;font-size:20px;padding:19px 38px;border-radius:999px;text-decoration:none}
+.date{font-size:18px;line-height:1.45;color:var(--teal)}
+.date b{font-weight:700}
+.side{position:relative}
+.frame{background:var(--violet);border-radius:24px;padding:18px 18px 0;overflow:hidden}
+.frame img{display:block;width:100%;aspect-ratio:4/4.6;object-fit:cover;object-position:62% 20%;border-radius:12px 12px 0 0}
+.quote{position:absolute;right:-28px;bottom:36px;background:#fff;border-radius:14px;padding:16px 20px;max-width:270px;box-shadow:0 10px 30px rgba(11,59,63,.12);font-family:Frank,serif;font-size:19px;line-height:1.35;color:var(--teal)}
+.quote small{display:block;font-family:Assistant,sans-serif;font-size:14px;color:#5B6668;margin-top:6px}
+@media (max-width:860px){
+ .wrap{padding:18px 18px 40px}
+ header span{display:none}
+ .hero{grid-template-columns:1fr;gap:30px;padding-top:26px}
+ .side{order:2}
+ .quote{right:12px;bottom:-18px}
+ .row{flex-direction:column;align-items:stretch;gap:16px}
+ .cta{text-align:center}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header><img src="img/fomberg-logo.png" alt="פומברג"><span>יום ראשון, י״ז בטבת · 11:00 · בזום</span></header>
+ <section class="hero">
+  <div>
+   <p class="kicker">הרצאה חיה למאמנים, יועצים ומטפלים</p>
+   <h1>להשפיע בענק<br>על העולם</h1>
+   <div class="rule"></div>
+   <p class="sub">באמצעות הרצאה בזום ושיווק דיגיטלי שמחובר לערכים שלך</p>
+   <div class="row">
+    <a class="cta" href="#form">אני רוצה להשתתף</a>
+    <p class="date"><b>יום ראשון, י״ז בטבת, 27.12</b><br>בשעה 11:00, בזום</p>
+   </div>
+  </div>
+  <div class="side">
+   <div class="frame"><img src="img/naftali-wall.webp" alt="נפתלי פומברג"></div>
+   <p class="quote">יש בך בשורה שהעולם צריך לשמוע.<small>נפתלי פומברג</small></p>
+  </div>
+ </section>
+</div>
+</body>
+</html>
