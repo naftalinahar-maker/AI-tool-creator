@@ -9,8 +9,11 @@
 
 const SMOOVE_URL = 'https://rest.smoove.io/v1/Contacts?updateIfExists=true';
 
-const json = (status, body) =>
-  new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
+const json = (statusCode, body) => ({
+  statusCode,
+  headers: { 'content-type': 'application/json; charset=utf-8' },
+  body: JSON.stringify(body)
+});
 
 function normPhone(v) {
   let d = String(v || '').replace(/[^\d+]/g, '');
@@ -19,11 +22,11 @@ function normPhone(v) {
   return d.replace(/\D/g, '');
 }
 
-export default async (req) => {
-  if (req.method !== 'POST') return json(405, { ok: false });
+export const handler = async (event) => {
+  if (event.httpMethod !== 'POST') return json(405, { ok: false });
 
   let data;
-  try { data = await req.json(); } catch { return json(400, { ok: false, error: 'bad_json' }); }
+  try { data = JSON.parse(event.body || ''); } catch { return json(400, { ok: false, error: 'bad_json' }); }
 
   // שדה מלכודת: אם מולא, זה בוט. עונים "הצלחה" ולא שומרים כלום.
   if (data.company) return json(200, { ok: true });
