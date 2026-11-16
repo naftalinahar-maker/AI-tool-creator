@@ -84,7 +84,7 @@ function np_customize_register( $wp_customize ) {
 			'np_about_photo',
 			array(
 				'label'       => 'מי אני – תמונה של נחמן',
-				'description' => 'אם לא מעלים תמונה, מוצג הלוגו.',
+				'description' => 'אפשר להחליף את התמונה של נחמן בתמונה אחרת.',
 				'section'     => 'np_business',
 				'priority'    => 200,
 			)

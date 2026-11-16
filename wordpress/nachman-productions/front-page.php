@@ -101,13 +101,9 @@ $np_faq = array(
 	<section class="section section--dark" id="about">
 		<div class="container about">
 			<div class="about__media reveal">
-				<?php $np_photo = np_opt( 'np_about_photo' ); ?>
-				<?php if ( $np_photo ) : ?>
-					<img class="about__photo" src="<?php echo esc_url( $np_photo ); ?>" alt="נחמן פומברג – נחמן הפקות" loading="lazy">
-					<span class="about__tag">Nachman Productions</span>
-				<?php else : ?>
-					<img class="about__photo about__photo--logo" src="<?php echo np_img( 'hero.jpg' ); ?>" alt="הלוגו של נחמן הפקות" width="1280" height="720" loading="lazy">
-				<?php endif; ?>
+				<?php $np_photo = np_opt( 'np_about_photo' ) ? np_opt( 'np_about_photo' ) : get_template_directory_uri() . '/assets/img/nachman.jpg'; ?>
+				<img class="about__photo" src="<?php echo esc_url( $np_photo ); ?>" alt="נחמן פומברג" width="900" height="1200" loading="lazy">
+				<span class="about__tag">Nachman Productions</span>
 			</div>
 			<div class="about__body">
 				<p class="eyebrow">מי אני</p>

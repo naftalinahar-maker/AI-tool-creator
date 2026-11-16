@@ -330,11 +330,11 @@ p { margin: 0 0 1em; }
 	background: var(--fire); opacity: .35; filter: blur(30px);
 }
 .about__photo {
-	position: relative; z-index: 1; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+	position: relative; z-index: 1; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%;
 	border-radius: 24px; border: 1px solid rgba(255, 138, 31, .5);
 }
 .about__photo--logo { aspect-ratio: 16 / 9; }
-@media (max-width: 900px) { .about__photo { aspect-ratio: 16 / 10; } }
+@media (max-width: 900px) { .about__media { max-width: 420px; margin-inline: auto; width: 100%; } }
 .about__tag {
 	position: absolute; z-index: 2; bottom: 18px; right: 18px;
 	padding: 8px 16px; border-radius: 999px; direction: ltr;
