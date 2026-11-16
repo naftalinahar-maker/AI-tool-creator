@@ -10,7 +10,6 @@ get_header();
 $np_price = (float) np_opt( 'np_price_per_block' );
 $np_block = max( 1, (int) np_opt( 'np_block_minutes' ) );
 $np_max   = max( 1, (int) np_opt( 'np_max_minutes' ) );
-$np_wa    = np_whatsapp_url( 'היי נחמן, אשמח להזמין עריכת סרט' );
 $np_sent  = isset( $_GET['np_sent'] ) ? sanitize_key( wp_unslash( $_GET['np_sent'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 $np_services = array(
@@ -25,8 +24,8 @@ $np_services = array(
 );
 
 $np_steps = array(
-	array( 'שולחים פרטים', 'ממלאים טופס קצר או שולחים הודעה – מה הסרט, כמה זמן ומה הסגנון.' ),
-	array( 'מעבירים חומרים', 'שולחים את הסרטונים, התמונות והמוזיקה בקישור הורדה (כמו Google Drive או WeTransfer).' ),
+	array( 'ממלאים טופס', 'משאירים שם ומייל ומספרים בקצרה על הסרט.' ),
+	array( 'משיבים עם החומרים', 'מקבלים מייל אוטומטי ומשיבים עליו עם הסרטונים, התמונות והמוזיקה (לקבצים גדולים: Google Drive או WeTransfer).' ),
 	array( 'עורכים בשבילכם', 'נחמן עורך את הסרט: חיתוכים, מעברים, מוזיקה, כתוביות וצבע.' ),
 	array( 'מקבלים סרט מוכן', 'מקבלים קובץ מוכן לצפייה ולשיתוף, ומשלמים לפי אורך הסרט בלבד.' ),
 );
@@ -35,8 +34,8 @@ $np_faq = array(
 	array( 'איך מחושב המחיר?', sprintf( 'המחיר הוא %1$s לכל %2$d דקות של סרט, ומעגלים כלפי מעלה ליחידה הבאה. לדוגמה: סרט של %3$d דקות = %4$s.', np_money( $np_price ), $np_block, $np_block + 2, np_money( ceil( ( $np_block + 2 ) / $np_block ) * $np_price ) ) ),
 	array( 'אילו סרטים אפשר לערוך?', sprintf( 'כל סוגי הסרטים – אירועים, רשתות חברתיות, יוטיוב, עסקים, מזכרות ועוד – באורך של עד %d דקות.', $np_max ) ),
 	array( 'הסרט שלי ארוך מחצי שעה, מה עושים?', 'צרו קשר ונבדוק יחד – אפשר לחלק לכמה סרטים או למצוא פתרון אחר.' ),
-	array( 'איך שולחים את החומרים?', 'הכי נוח בקישור הורדה – Google Drive, WeTransfer או כל שירות שיתוף קבצים אחר. אפשר גם קטעים קצרים ישירות בוואטסאפ.' ),
-	array( 'באיזו איכות אקבל את הסרט?', 'עד 4K (אולטרה HD), בהתאם לאיכות החומרים שתשלחו. אפשר לבקש גם קובץ קל יותר לוואטסאפ ולרשתות.' ),
+	array( 'איך שולחים את החומרים?', 'אחרי שממלאים את הטופס מקבלים מייל, ופשוט משיבים עליו עם החומרים. לקבצים גדולים הכי נוח קישור הורדה – Google Drive, WeTransfer או כל שירות שיתוף קבצים אחר.' ),
+	array( 'באיזו איכות אקבל את הסרט?', 'עד 4K (אולטרה HD), בהתאם לאיכות החומרים שתשלחו. אפשר לבקש גם קובץ קל יותר לשיתוף ברשתות.' ),
 	array( 'באילו כלים נחמן עובד?', 'נחמן משלב כמה כלים ביחד: CapCut, Canva, Clipchamp ו-Google Vids, יחד עם כלי בינה מלאכותית שמזרזים את העבודה ומשפרים את התוצאה.' ),
 	array( 'כמה זמן לוקח לקבל את הסרט?', 'תלוי באורך הסרט ובכמות החומרים. כשתשלחו פרטים תקבלו הערכת זמן מדויקת.' ),
 );
@@ -251,15 +250,9 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 			<div class="contact__info">
 				<p class="eyebrow">בואו נתחיל</p>
 				<h2 class="section__title">מוכנים לסרט שלכם?</h2>
-				<p class="section__lead">השאירו פרטים ונחמן יחזור אליכם עם כל הפרטים.</p>
+				<p class="section__lead">משאירים שם ומייל, ומיד מקבלים מייל עם הוראות. משיבים עליו עם החומרים לסרט, ונחמן מתחיל לעבוד.</p>
 
 				<ul class="contact__list">
-					<?php if ( $np_wa ) : ?>
-						<li><a class="btn btn--wa" href="<?php echo esc_url( $np_wa ); ?>" target="_blank" rel="noopener">שלחו הודעה בוואטסאפ</a></li>
-					<?php endif; ?>
-					<?php if ( np_opt( 'np_phone' ) ) : ?>
-						<li>📞 <a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', np_opt( 'np_phone' ) ) ); ?>"><?php echo esc_html( np_opt( 'np_phone' ) ); ?></a></li>
-					<?php endif; ?>
 					<?php if ( np_opt( 'np_email' ) ) : ?>
 						<li>✉️ <a href="mailto:<?php echo esc_attr( np_opt( 'np_email' ) ); ?>"><?php echo esc_html( np_opt( 'np_email' ) ); ?></a></li>
 					<?php endif; ?>
@@ -271,9 +264,9 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 
 			<form class="form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<?php if ( '1' === $np_sent ) : ?>
-					<p class="form__msg form__msg--ok" role="status">תודה! הפנייה התקבלה, ונחזור אליכם בהקדם.</p>
+					<p class="form__msg form__msg--ok" role="status">תודה! שלחנו לכם מייל. השיבו עליו עם החומרים לסרט (בדקו גם בתיקיית הספאם).</p>
 				<?php elseif ( 'missing' === $np_sent ) : ?>
-					<p class="form__msg form__msg--err" role="alert">צריך למלא שם וטלפון.</p>
+					<p class="form__msg form__msg--err" role="alert">צריך למלא שם וכתובת מייל תקינה.</p>
 				<?php elseif ( 'error' === $np_sent ) : ?>
 					<p class="form__msg form__msg--err" role="alert">משהו השתבש בשליחה. נסו שוב או פנו אלינו ישירות.</p>
 				<?php endif; ?>
@@ -284,7 +277,7 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 
 				<div class="form__row">
 					<label class="field"><span>שם מלא *</span><input type="text" name="np_name" required autocomplete="name"></label>
-					<label class="field"><span>טלפון *</span><input type="tel" name="np_phone" required autocomplete="tel" inputmode="tel"></label>
+					<label class="field"><span>אימייל *</span><input type="email" name="np_email" required autocomplete="email" inputmode="email" dir="ltr"></label>
 				</div>
 				<div class="form__row">
 					<label class="field"><span>סוג הסרט</span>
@@ -298,7 +291,7 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 					<label class="field"><span>אורך משוער (דקות)</span><input type="number" name="np_length" id="form-length" min="1" max="<?php echo (int) $np_max; ?>" inputmode="numeric"></label>
 				</div>
 				<label class="field"><span>ספרו לנו על הסרט</span><textarea name="np_message" rows="4"></textarea></label>
-				<button class="btn btn--fire btn--block" type="submit">שליחה</button>
+				<button class="btn btn--fire btn--block" type="submit">שליחה – קבלו מייל עם הוראות</button>
 			</form>
 		</div>
 	</section>

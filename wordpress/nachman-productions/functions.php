@@ -72,24 +72,6 @@ function np_img( $file ) {
 }
 
 /**
- * Digits-only phone number, converted to international format for wa.me (Israel: 05x → 9725x).
- */
-function np_whatsapp_url( $text = '' ) {
-	$num = preg_replace( '/\D+/', '', (string) np_opt( 'np_whatsapp' ) );
-	if ( '' === $num ) {
-		return '';
-	}
-	if ( 0 === strpos( $num, '0' ) ) {
-		$num = '972' . substr( $num, 1 );
-	}
-	$url = 'https://wa.me/' . $num;
-	if ( $text ) {
-		$url .= '?text=' . rawurlencode( $text );
-	}
-	return $url;
-}
-
-/**
  * Format a price for display: 1 → "₪1", 1.5 → "₪1.50".
  */
 function np_money( $amount ) {

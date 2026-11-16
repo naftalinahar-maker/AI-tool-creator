@@ -19,8 +19,6 @@ function np_defaults() {
 		'np_price_per_block' => '5',
 		'np_block_minutes'   => '10',
 		'np_max_minutes'     => '30',
-		'np_phone'           => '058-448-8148',
-		'np_whatsapp'        => '0584488148',
 		'np_email'           => 'naftalinahar@gmail.com',
 		'np_area'            => '',
 		'np_instagram'       => '',
@@ -29,6 +27,7 @@ function np_defaults() {
 		'np_facebook'        => '',
 		'np_videos'          => '',
 		'np_about'           => '',
+		'np_autoreply'       => "שלום {name},\n\nתודה שפנית לנחמן הפקות! קיבלנו את הבקשה שלך לעריכת סרט.\n\nכדי שנוכל להתחיל, אפשר פשוט להשיב למייל הזה ולצרף את החומרים לסרט:\n• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n• מוזיקה, אם יש שיר מסוים שרוצים\n• טקסטים, כתוביות או שמות שצריכים להופיע\n• כל הערה על הסגנון שאתם רוצים\n\nמחיר משוער: {price}\n\nנחזור אליך בהקדם,\nנחמן הפקות",
 	);
 }
 
@@ -50,7 +49,7 @@ function np_customize_register( $wp_customize ) {
 		array(
 			'title'       => 'פרטי העסק – נחמן הפקות',
 			'priority'    => 20,
-			'description' => 'כאן מעדכנים מחירים, פרטי קשר, רשתות חברתיות וסרטונים לתיק העבודות. שדה ריק פשוט לא יוצג באתר.',
+			'description' => 'כאן מעדכנים מחירים, מייל, רשתות חברתיות וסרטונים לתיק העבודות. שדה ריק פשוט לא יוצג באתר.',
 		)
 	);
 
@@ -60,8 +59,6 @@ function np_customize_register( $wp_customize ) {
 		'np_price_per_block' => array( 'מחיר (₪) לכל יחידת זמן', 'number', 'np_sanitize_number' ),
 		'np_block_minutes'   => array( 'יחידת זמן (דקות)', 'number', 'absint' ),
 		'np_max_minutes'     => array( 'אורך סרט מקסימלי (דקות)', 'number', 'absint' ),
-		'np_phone'           => array( 'טלפון', 'text', 'sanitize_text_field' ),
-		'np_whatsapp'        => array( 'מספר וואטסאפ (למשל 0501234567)', 'text', 'sanitize_text_field' ),
 		'np_email'           => array( 'אימייל (גם לקבלת פניות מהטופס)', 'email', 'sanitize_email' ),
 		'np_area'            => array( 'אזור שירות / הערה', 'text', 'sanitize_text_field' ),
 		'np_instagram'       => array( 'קישור לאינסטגרם', 'url', 'esc_url_raw' ),
@@ -70,6 +67,7 @@ function np_customize_register( $wp_customize ) {
 		'np_facebook'        => array( 'קישור לפייסבוק', 'url', 'esc_url_raw' ),
 		'np_videos'          => array( 'תיק עבודות – קישורי יוטיוב/וימאו, קישור בכל שורה', 'textarea', 'np_sanitize_lines' ),
 		'np_about'           => array( 'קצת על נחמן (אופציונלי)', 'textarea', 'sanitize_textarea_field' ),
+		'np_autoreply'       => array( 'מייל תשובה אוטומטי ללקוח. אפשר להשתמש ב-{name} (שם הלקוח) וב-{price} (מחיר משוער)', 'textarea', 'sanitize_textarea_field' ),
 	);
 
 	$defaults = np_defaults();
