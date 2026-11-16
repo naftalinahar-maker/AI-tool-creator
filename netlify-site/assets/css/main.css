@@ -323,7 +323,23 @@ p { margin: 0 0 1em; }
 
 /* ---------- About ---------- */
 .about { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; align-items: center; }
-@media (max-width: 900px) { .about { grid-template-columns: 1fr; gap: 36px; } }
+/* Photo stays beside the text at every width. On narrow screens the facts and button span the full width below. */
+@media (max-width: 900px) {
+	.about { grid-template-columns: 40% 1fr; gap: 14px 16px; align-items: start; }
+	.about__body { display: contents; }
+	.about__media { grid-column: 1; grid-row: 1 / span 3; }
+	.about__media::before { inset: -6px; filter: blur(18px); }
+	.about__body > .eyebrow, .about__body > .section__title, .about__body > .about__text { grid-column: 2; }
+	.about__body > .eyebrow { margin: 0; }
+	.about__body > .section__title { margin: 0; font-size: clamp(22px, 5.6vw, 34px); }
+	.about__text { font-size: 15.5px; line-height: 1.65; }
+	.about__text p { margin-bottom: .8em; }
+	.about__facts, .about__body > .btn { grid-column: 1 / -1; }
+	.about__facts { margin: 6px 0 0; }
+	.about__body > .btn { justify-self: start; }
+	.about__photo { border-radius: 16px; }
+	.about__tag { display: none; }
+}
 .about__media { position: relative; }
 .about__media::before {
 	content: ""; position: absolute; inset: -14px; z-index: 0; border-radius: 32px;
@@ -334,7 +350,7 @@ p { margin: 0 0 1em; }
 	border-radius: 24px; border: 1px solid rgba(255, 138, 31, .5);
 }
 .about__photo--logo { aspect-ratio: 16 / 9; }
-@media (max-width: 900px) { .about__media { max-width: 420px; margin-inline: auto; width: 100%; } }
+
 .about__tag {
 	position: absolute; z-index: 2; bottom: 18px; right: 18px;
 	padding: 8px 16px; border-radius: 999px; direction: ltr;
