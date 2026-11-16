@@ -103,7 +103,7 @@ $np_faq = array(
 			<div class="about__media reveal">
 				<?php $np_photo = np_opt( 'np_about_photo' ); ?>
 				<?php if ( $np_photo ) : ?>
-					<img class="about__photo" src="<?php echo esc_url( $np_photo ); ?>" alt="נחמן – נחמן הפקות" loading="lazy">
+					<img class="about__photo" src="<?php echo esc_url( $np_photo ); ?>" alt="נחמן פומברג – נחמן הפקות" loading="lazy">
 					<span class="about__tag">Nachman Productions</span>
 				<?php else : ?>
 					<img class="about__photo about__photo--logo" src="<?php echo np_img( 'hero.jpg' ); ?>" alt="הלוגו של נחמן הפקות" width="1280" height="720" loading="lazy">
@@ -114,10 +114,10 @@ $np_faq = array(
 				<h2 class="section__title"><?php echo esc_html( np_opt( 'np_about_title' ) ); ?></h2>
 				<div class="about__text"><?php echo wp_kses_post( wpautop( np_opt( 'np_about' ) ) ); ?></div>
 				<ul class="about__facts">
-					<li><strong>כל</strong><span>סוגי הסרטים</span></li>
+					<li><strong>+60</strong><span>סרטים ערוכים</span></li>
+					<li><strong>שנה</strong><span>של ניסיון</span></li>
 					<li><strong>4</strong><span>כלי עריכה</span></li>
-					<li><strong>AI</strong><span>בכל עריכה</span></li>
-					<li><strong>4K</strong><span>איכות</span></li>
+					<li><strong>4K</strong><span>איכות + AI</span></li>
 				</ul>
 				<a class="btn btn--fire" href="#contact">בואו נעבוד יחד</a>
 			</div>
