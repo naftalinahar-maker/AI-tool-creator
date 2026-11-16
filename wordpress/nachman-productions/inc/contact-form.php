@@ -2,10 +2,10 @@
 /**
  * Contact form handler.
  *
- * The customer leaves a name and email. Two emails are sent:
- * 1. To Nachman: the request details (Reply-To = the customer).
- * 2. To the customer: an automatic reply asking them to answer with the
- *    materials for the film (Reply-To = Nachman), so their answer lands in his inbox.
+ * The customer leaves a name, email and package.
+ * 1. Nachman gets the request details (Reply-To = the customer).
+ * 2. Optional (Customizer checkbox): the customer gets an automatic reply asking
+ *    them to answer with the materials for the film (Reply-To = Nachman).
  *
  * @package nachman
  */
@@ -33,7 +33,7 @@ function np_handle_contact() {
 	$name    = isset( $_POST['np_name'] ) ? sanitize_text_field( wp_unslash( $_POST['np_name'] ) ) : '';
 	$email   = isset( $_POST['np_email'] ) ? sanitize_email( wp_unslash( $_POST['np_email'] ) ) : '';
 	$type    = isset( $_POST['np_type'] ) ? sanitize_text_field( wp_unslash( $_POST['np_type'] ) ) : '';
-	$length  = isset( $_POST['np_length'] ) ? absint( $_POST['np_length'] ) : 0;
+	$package = isset( $_POST['np_package'] ) ? sanitize_key( wp_unslash( $_POST['np_package'] ) ) : '';
 	$message = isset( $_POST['np_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['np_message'] ) ) : '';
 
 	if ( '' === $name || ! is_email( $email ) ) {
@@ -52,11 +52,8 @@ function np_handle_contact() {
 		$owner = get_option( 'admin_email' );
 	}
 
-	$price = '—';
-	if ( $length ) {
-		$block = max( 1, (int) np_opt( 'np_block_minutes' ) );
-		$price = np_money( ceil( $length / $block ) * (float) np_opt( 'np_price_per_block' ) ) . " (סרט של {$length} דקות)";
-	}
+	$pkgs  = np_packages();
+	$price = isset( $pkgs[ $package ] ) ? $pkgs[ $package ][0] . ' – ' . np_money( $pkgs[ $package ][2] ) : '—';
 
 	// Names in headers must not contain line breaks or quotes.
 	$safe_name = trim( str_replace( array( "\r", "\n", '"' ), '', $name ) );
@@ -67,10 +64,10 @@ function np_handle_contact() {
 	$body .= "שם: {$name}\n";
 	$body .= "מייל: {$email}\n";
 	$body .= 'סוג הסרט: ' . ( $type ? $type : '—' ) . "\n";
-	$body .= 'אורך משוער: ' . ( $length ? $length . ' דקות' : '—' ) . "\n";
-	$body .= "מחיר משוער: {$price}\n\n";
+	$body .= "חבילה: {$price}\n\n";
 	$body .= "הודעה:\n" . ( $message ? $message : '—' ) . "\n\n";
-	$body .= "הלקוח קיבל מייל אוטומטי שמבקש ממנו להשיב עם החומרים. אפשר להשיב למייל הזה כדי לכתוב ללקוח ישירות.\n";
+	$body .= np_opt( 'np_autoreply_on' ) ? "הלקוח קיבל מייל אוטומטי שמבקש ממנו להשיב עם החומרים.\n" : '';
+	$body .= "אפשר להשיב למייל הזה כדי לכתוב ללקוח ישירות.\n";
 
 	$sent_owner = wp_mail(
 		$owner,
@@ -79,7 +76,11 @@ function np_handle_contact() {
 		array( 'Reply-To: "' . $safe_name . '" <' . $email . '>' )
 	);
 
-	// 2) Automatic reply to the customer.
+	// 2) Automatic reply to the customer (only when enabled in the Customizer).
+	if ( ! np_opt( 'np_autoreply_on' ) ) {
+		np_contact_redirect( $back, $sent_owner ? '1' : 'error' );
+	}
+
 	$template = np_opt( 'np_autoreply' );
 	if ( '' === $template ) {
 		$defaults = np_defaults();
@@ -89,7 +90,6 @@ function np_handle_contact() {
 	if ( $type || $message ) {
 		$reply .= "\n\n— — —\nסיכום הבקשה שלך:\n";
 		$reply .= $type ? "סוג הסרט: {$type}\n" : '';
-		$reply .= $length ? "אורך משוער: {$length} דקות\n" : '';
 		$reply .= $message ? "הודעה: {$message}\n" : '';
 	}
 

@@ -7,9 +7,10 @@
 
 get_header();
 
-$np_price = (float) np_opt( 'np_price_per_block' );
-$np_block = max( 1, (int) np_opt( 'np_block_minutes' ) );
+$np_pkgs  = np_packages();
+$np_price = $np_pkgs['single'][2];
 $np_max   = max( 1, (int) np_opt( 'np_max_minutes' ) );
+$np_auto  = (bool) np_opt( 'np_autoreply_on' );
 $np_sent  = isset( $_GET['np_sent'] ) ? sanitize_key( wp_unslash( $_GET['np_sent'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 $np_services = array(
@@ -24,17 +25,17 @@ $np_services = array(
 );
 
 $np_steps = array(
-	array( 'ממלאים טופס', 'משאירים שם ומייל ומספרים בקצרה על הסרט.' ),
-	array( 'משיבים עם החומרים', 'מקבלים מייל אוטומטי ומשיבים עליו עם הסרטונים, התמונות והמוזיקה (לקבצים גדולים: Google Drive או WeTransfer).' ),
+	array( 'בוחרים חבילה', 'סרטון בודד או חבילה, ממלאים טופס קצר עם שם ומייל ומספרים על הסרטונים.' ),
+	array( 'שולחים חומרים', 'נחמן חוזר אליכם במייל, ואתם משיבים עם הסרטונים, התמונות והמוזיקה (לקבצים גדולים: Google Drive או WeTransfer).' ),
 	array( 'עורכים בשבילכם', 'נחמן עורך את הסרט: חיתוכים, מעברים, מוזיקה, כתוביות וצבע.' ),
 	array( 'מקבלים סרט מוכן', 'מקבלים קובץ מוכן לצפייה ולשיתוף, ומשלמים לפי אורך הסרט בלבד.' ),
 );
 
 $np_faq = array(
-	array( 'איך מחושב המחיר?', sprintf( 'המחיר הוא %1$s לכל %2$d דקות של סרט, ומעגלים כלפי מעלה ליחידה הבאה. לדוגמה: סרט של %3$d דקות = %4$s.', np_money( $np_price ), $np_block, $np_block + 2, np_money( ceil( ( $np_block + 2 ) / $np_block ) * $np_price ) ) ),
-	array( 'אילו סרטים אפשר לערוך?', sprintf( 'כל סוגי הסרטים – אירועים, רשתות חברתיות, יוטיוב, עסקים, מזכרות ועוד – באורך של עד %d דקות.', $np_max ) ),
+	array( 'כמה זה עולה?', sprintf( 'סרטון בודד עולה %1$s. חבילת 10 סרטונים עולה %2$s, וחבילת 20 סרטונים עולה %3$s בלבד. החבילות מתאימות במיוחד לעסקים ולמי שמעלה תוכן לרשתות באופן קבוע.', np_money( $np_price ), np_money( $np_pkgs['pack10'][2] ), np_money( $np_pkgs['pack20'][2] ) ) ),
+	array( 'אילו סרטים אפשר לערוך?', sprintf( 'כל סוגי הסרטים – אירועים, רשתות חברתיות, יוטיוב, עסקים, מזכרות ועוד – באורך של עד %d דקות לסרטון.', $np_max ) ),
 	array( 'הסרט שלי ארוך מחצי שעה, מה עושים?', 'צרו קשר ונבדוק יחד – אפשר לחלק לכמה סרטים או למצוא פתרון אחר.' ),
-	array( 'איך שולחים את החומרים?', 'אחרי שממלאים את הטופס מקבלים מייל, ופשוט משיבים עליו עם החומרים. לקבצים גדולים הכי נוח קישור הורדה – Google Drive, WeTransfer או כל שירות שיתוף קבצים אחר.' ),
+	array( 'איך שולחים את החומרים?', 'אחרי שממלאים את הטופס נחמן חוזר אליכם במייל, ופשוט משיבים עליו עם החומרים. לקבצים גדולים הכי נוח קישור הורדה – Google Drive, WeTransfer או כל שירות שיתוף קבצים אחר.' ),
 	array( 'באיזו איכות אקבל את הסרט?', 'עד 4K (אולטרה HD), בהתאם לאיכות החומרים שתשלחו. אפשר לבקש גם קובץ קל יותר לשיתוף ברשתות.' ),
 	array( 'באילו כלים נחמן עובד?', 'נחמן משלב כמה כלים ביחד: CapCut, Canva, Clipchamp ו-Google Vids, יחד עם כלי בינה מלאכותית שמזרזים את העבודה ומשפרים את התוצאה.' ),
 	array( 'כמה זמן לוקח לקבל את הסרט?', 'תלוי באורך הסרט ובכמות החומרים. כשתשלחו פרטים תקבלו הערכת זמן מדויקת.' ),
@@ -55,7 +56,7 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 
 			<div class="hero__price">
 				<span class="hero__price-num"><?php echo np_money_html( $np_price ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-				<span class="hero__price-label">לכל <?php echo (int) $np_block; ?> דקות סרט<br><small>זיל הזול – באמת.</small></span>
+				<span class="hero__price-label">לסרטון<br><small>ובחבילה – עוד יותר זול.</small></span>
 			</div>
 
 			<div class="hero__actions">
@@ -72,7 +73,7 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 			<div><strong>כל</strong><span>סוגי הסרטים</span></div>
 			<div><strong>עד <?php echo (int) $np_max; ?></strong><span>דקות לסרט</span></div>
 			<div><strong>AI</strong><span>עריכה משולבת בינה מלאכותית</span></div>
-			<div><strong><?php echo np_money_html( $np_price ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong><span>ל-<?php echo (int) $np_block; ?> דקות</span></div>
+			<div><strong><?php echo np_money_html( $np_price ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong><span>לסרטון</span></div>
 			<div><strong>4K</strong><span>איכות אולטרה HD</span></div>
 		</div>
 	</div>
@@ -126,45 +127,41 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 
 	<!-- PRICING -->
 	<section class="section" id="pricing">
-		<div class="container pricing">
-			<div class="pricing__info">
-				<p class="eyebrow">מחיר אחד, פשוט ושקוף</p>
-				<h2 class="section__title"><?php echo esc_html( np_money( $np_price ) ); ?> לכל <?php echo (int) $np_block; ?> דקות.<br><span class="text-fire">זהו. בלי אותיות קטנות.</span></h2>
-				<p class="section__lead">משלמים רק לפי אורך הסרט. בלי חבילות ובלי תוספות מפתיעות.</p>
-				<ul class="checks">
-					<li>חיתוך ועריכה מלאה</li>
-					<li>מוזיקה ומעברים</li>
-					<li>כתוביות וטקסטים</li>
-					<li>תיקון צבע וסאונד</li>
-					<li>איכות 4K</li>
-					<li>שיפורים בעזרת AI</li>
-				</ul>
-			</div>
+		<div class="container">
+			<header class="section__head">
+				<p class="eyebrow">מחירון</p>
+				<h2 class="section__title">מחירים שקופים. <span class="text-fire">בלי אותיות קטנות.</span></h2>
+				<p class="section__lead">כל סרטון עד <?php echo (int) $np_max; ?> דקות. ככה שיותר סרטונים, ככה כל סרטון יוצא זול יותר.</p>
+			</header>
 
-			<div class="calc reveal" aria-labelledby="calc-title">
-				<h3 id="calc-title" class="calc__title">מחשבון מחיר</h3>
-				<label class="calc__label" for="calc-minutes">כמה דקות יהיה הסרט?</label>
-				<input class="calc__range" id="calc-minutes" type="range" min="1" max="<?php echo (int) $np_max; ?>" value="<?php echo (int) min( 10, $np_max ); ?>" step="1">
-				<div class="calc__row">
-					<span><output id="calc-min-out"><?php echo (int) min( 10, $np_max ); ?></output> דקות</span>
-					<span class="calc__total" id="calc-total"><?php echo np_money_html( ceil( min( 10, $np_max ) / $np_block ) * $np_price ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-				</div>
-				<p class="calc__note">מעוגל כלפי מעלה ליחידה של <?php echo (int) $np_block; ?> דקות.</p>
-				<a class="btn btn--fire btn--block" href="#contact" id="calc-cta">אני רוצה את זה</a>
-
-				<table class="calc__table">
-					<caption class="screen-reader-text">דוגמאות למחירים</caption>
-					<tbody>
-					<?php foreach ( array_unique( array( $np_block, 2 * $np_block, 3 * $np_block, $np_max ) ) as $m ) : ?>
-						<?php
-						if ( $m > $np_max ) {
-							continue;
-						}
-						?>
-						<tr><td>סרט של <?php echo (int) $m; ?> דקות</td><td><?php echo esc_html( np_money( ceil( $m / $np_block ) * $np_price ) ); ?></td></tr>
-					<?php endforeach; ?>
-					</tbody>
-				</table>
+			<div class="plans">
+				<?php foreach ( $np_pkgs as $key => $pkg ) : ?>
+					<?php
+					$per     = $pkg[1] > 0 ? $pkg[2] / $pkg[1] : 0;
+					$save    = $pkg[1] * $np_price - $pkg[2];
+					$is_best = 'pack20' === $key;
+					?>
+					<article class="plan reveal<?php echo $is_best ? ' plan--best' : ''; ?>">
+						<?php if ( $is_best ) : ?><span class="plan__badge">הכי משתלם</span><?php endif; ?>
+						<h3 class="plan__name"><?php echo esc_html( $pkg[0] ); ?></h3>
+						<div class="plan__price"><?php echo np_money_html( $pkg[2] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+						<p class="plan__per">
+							<?php if ( $pkg[1] > 1 ) : ?>
+								<?php echo esc_html( np_money( round( $per, 2 ) ) ); ?> לסרטון
+							<?php else : ?>
+								לסרטון אחד
+							<?php endif; ?>
+						</p>
+						<p class="plan__save"><?php echo $save > 0 ? esc_html( 'חוסכים ' . np_money( $save ) ) : '&nbsp;'; ?></p>
+						<ul class="plan__list">
+							<li><?php echo 1 === $pkg[1] ? 'סרטון אחד' : esc_html( $pkg[1] . ' סרטונים' ); ?>, כל אחד עד <?php echo (int) $np_max; ?> דקות</li>
+							<li>עריכה מלאה בשילוב AI</li>
+							<li>איכות עד 4K</li>
+							<li>מוזיקה, כתוביות ומעברים</li>
+						</ul>
+						<a class="btn btn--block <?php echo $is_best ? 'btn--fire' : 'btn--ghost'; ?>" href="#contact" data-package="<?php echo esc_attr( $key ); ?>">אני רוצה את זה</a>
+					</article>
+				<?php endforeach; ?>
 			</div>
 		</div>
 	</section>
@@ -250,7 +247,7 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 			<div class="contact__info">
 				<p class="eyebrow">בואו נתחיל</p>
 				<h2 class="section__title">מוכנים לסרט שלכם?</h2>
-				<p class="section__lead">משאירים שם ומייל, ומיד מקבלים מייל עם הוראות. משיבים עליו עם החומרים לסרט, ונחמן מתחיל לעבוד.</p>
+				<p class="section__lead"><?php echo $np_auto ? 'משאירים שם ומייל, ומיד מקבלים מייל עם הוראות. משיבים עליו עם החומרים לסרט, ונחמן מתחיל לעבוד.' : 'משאירים שם ומייל, ונחמן יחזור אליכם במייל עם כל הפרטים.'; ?></p>
 
 				<ul class="contact__list">
 					<?php if ( np_opt( 'np_email' ) ) : ?>
@@ -264,7 +261,7 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 
 			<form class="form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<?php if ( '1' === $np_sent ) : ?>
-					<p class="form__msg form__msg--ok" role="status">תודה! שלחנו לכם מייל. השיבו עליו עם החומרים לסרט (בדקו גם בתיקיית הספאם).</p>
+					<p class="form__msg form__msg--ok" role="status"><?php echo $np_auto ? 'תודה! שלחנו לכם מייל. השיבו עליו עם החומרים לסרט (בדקו גם בתיקיית הספאם).' : 'תודה! הפנייה התקבלה, ונחמן יחזור אליכם במייל בהקדם.'; ?></p>
 				<?php elseif ( 'missing' === $np_sent ) : ?>
 					<p class="form__msg form__msg--err" role="alert">צריך למלא שם וכתובת מייל תקינה.</p>
 				<?php elseif ( 'error' === $np_sent ) : ?>
@@ -288,10 +285,16 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 							<?php endforeach; ?>
 						</select>
 					</label>
-					<label class="field"><span>אורך משוער (דקות)</span><input type="number" name="np_length" id="form-length" min="1" max="<?php echo (int) $np_max; ?>" inputmode="numeric"></label>
+					<label class="field"><span>חבילה</span>
+						<select name="np_package" id="form-package">
+							<?php foreach ( $np_pkgs as $key => $pkg ) : ?>
+								<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $pkg[0] . ' – ' . np_money( $pkg[2] ) ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
 				</div>
 				<label class="field"><span>ספרו לנו על הסרט</span><textarea name="np_message" rows="4"></textarea></label>
-				<button class="btn btn--fire btn--block" type="submit">שליחה – קבלו מייל עם הוראות</button>
+				<button class="btn btn--fire btn--block" type="submit"><?php echo $np_auto ? 'שליחה – קבלו מייל עם הוראות' : 'שליחה'; ?></button>
 			</form>
 		</div>
 	</section>

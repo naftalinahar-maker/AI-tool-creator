@@ -40,15 +40,6 @@ function np_assets() {
 	wp_enqueue_style( 'np-fonts', 'https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&family=Secular+One&display=swap', array(), null );
 	wp_enqueue_style( 'np-main', get_template_directory_uri() . '/assets/css/main.css', array( 'np-fonts' ), NP_VERSION );
 	wp_enqueue_script( 'np-main', get_template_directory_uri() . '/assets/js/main.js', array(), NP_VERSION, true );
-	wp_localize_script(
-		'np-main',
-		'NP_PRICE',
-		array(
-			'price'   => (float) np_opt( 'np_price_per_block' ),
-			'block'   => max( 1, (int) np_opt( 'np_block_minutes' ) ),
-			'max'     => max( 1, (int) np_opt( 'np_max_minutes' ) ),
-		)
-	);
 }
 add_action( 'wp_enqueue_scripts', 'np_assets' );
 

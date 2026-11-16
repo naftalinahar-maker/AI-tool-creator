@@ -16,8 +16,10 @@ function np_defaults() {
 	return array(
 		'np_tagline'         => 'עריכת סרטים מקצועית במחיר שלא תאמינו',
 		'np_hero_text'       => 'כל סוגי הסרטים עד חצי שעה, בעריכה משולבת AI ובאיכות 4K. שולחים חומרים ומקבלים סרט ערוך ומוכן, בלי חבילות מסובכות ובלי הפתעות במחיר.',
-		'np_price_per_block' => '5',
-		'np_block_minutes'   => '10',
+		'np_price_single'    => '20',
+		'np_price_pack10'    => '180',
+		'np_price_pack20'    => '250',
+		'np_autoreply_on'    => false,
 		'np_max_minutes'     => '30',
 		'np_email'           => 'naftalinahar@gmail.com',
 		'np_area'            => '',
@@ -27,7 +29,7 @@ function np_defaults() {
 		'np_facebook'        => '',
 		'np_videos'          => '',
 		'np_about'           => '',
-		'np_autoreply'       => "שלום {name},\n\nתודה שפנית לנחמן הפקות! קיבלנו את הבקשה שלך לעריכת סרט.\n\nכדי שנוכל להתחיל, אפשר פשוט להשיב למייל הזה ולצרף את החומרים לסרט:\n• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n• מוזיקה, אם יש שיר מסוים שרוצים\n• טקסטים, כתוביות או שמות שצריכים להופיע\n• כל הערה על הסגנון שאתם רוצים\n\nמחיר משוער: {price}\n\nנחזור אליך בהקדם,\nנחמן הפקות",
+		'np_autoreply'       => "שלום {name},\n\nתודה שפנית לנחמן הפקות! קיבלנו את הבקשה שלך לעריכת סרט.\n\nכדי שנוכל להתחיל, אפשר פשוט להשיב למייל הזה ולצרף את החומרים לסרט:\n• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n• מוזיקה, אם יש שיר מסוים שרוצים\n• טקסטים, כתוביות או שמות שצריכים להופיע\n• כל הערה על הסגנון שאתם רוצים\n\nהחבילה שבחרת: {price}\n\nנחזור אליך בהקדם,\nנחמן הפקות",
 	);
 }
 
@@ -56,9 +58,10 @@ function np_customize_register( $wp_customize ) {
 	$fields = array(
 		'np_tagline'         => array( 'כותרת ראשית', 'text', 'sanitize_text_field' ),
 		'np_hero_text'       => array( 'טקסט פתיחה', 'textarea', 'sanitize_textarea_field' ),
-		'np_price_per_block' => array( 'מחיר (₪) לכל יחידת זמן', 'number', 'np_sanitize_number' ),
-		'np_block_minutes'   => array( 'יחידת זמן (דקות)', 'number', 'absint' ),
-		'np_max_minutes'     => array( 'אורך סרט מקסימלי (דקות)', 'number', 'absint' ),
+		'np_price_single'    => array( 'מחיר לסרטון בודד (₪)', 'number', 'np_sanitize_number' ),
+		'np_price_pack10'    => array( 'מחיר חבילת 10 סרטונים (₪)', 'number', 'np_sanitize_number' ),
+		'np_price_pack20'    => array( 'מחיר חבילת 20 סרטונים (₪)', 'number', 'np_sanitize_number' ),
+		'np_max_minutes'     => array( 'אורך מקסימלי לסרטון (דקות)', 'number', 'absint' ),
 		'np_email'           => array( 'אימייל (גם לקבלת פניות מהטופס)', 'email', 'sanitize_email' ),
 		'np_area'            => array( 'אזור שירות / הערה', 'text', 'sanitize_text_field' ),
 		'np_instagram'       => array( 'קישור לאינסטגרם', 'url', 'esc_url_raw' ),
@@ -67,7 +70,8 @@ function np_customize_register( $wp_customize ) {
 		'np_facebook'        => array( 'קישור לפייסבוק', 'url', 'esc_url_raw' ),
 		'np_videos'          => array( 'תיק עבודות – קישורי יוטיוב/וימאו, קישור בכל שורה', 'textarea', 'np_sanitize_lines' ),
 		'np_about'           => array( 'קצת על נחמן (אופציונלי)', 'textarea', 'sanitize_textarea_field' ),
-		'np_autoreply'       => array( 'מייל תשובה אוטומטי ללקוח. אפשר להשתמש ב-{name} (שם הלקוח) וב-{price} (מחיר משוער)', 'textarea', 'sanitize_textarea_field' ),
+		'np_autoreply_on'    => array( 'לשלוח ללקוח מייל תשובה אוטומטי', 'checkbox', 'wp_validate_boolean' ),
+		'np_autoreply'       => array( 'נוסח המייל האוטומטי. אפשר להשתמש ב-{name} (שם הלקוח) וב-{price} (החבילה והמחיר)', 'textarea', 'sanitize_textarea_field' ),
 	);
 
 	$defaults = np_defaults();
@@ -90,6 +94,17 @@ function np_customize_register( $wp_customize ) {
 	}
 }
 add_action( 'customize_register', 'np_customize_register' );
+
+/**
+ * Price packages: key => [label, number of videos, total price].
+ */
+function np_packages() {
+	return array(
+		'single' => array( 'סרטון בודד', 1, (float) np_opt( 'np_price_single' ) ),
+		'pack10' => array( 'חבילת 10 סרטונים', 10, (float) np_opt( 'np_price_pack10' ) ),
+		'pack20' => array( 'חבילת 20 סרטונים', 20, (float) np_opt( 'np_price_pack20' ) ),
+	);
+}
 
 /**
  * Sanitize a non-negative decimal number.

@@ -23,31 +23,13 @@
 		});
 	}
 
-	// Price calculator.
-	var range = document.getElementById('calc-minutes');
-	if (range && window.NP_PRICE) {
-		var out = document.getElementById('calc-min-out');
-		var total = document.getElementById('calc-total');
-		var cta = document.getElementById('calc-cta');
-		var formLength = document.getElementById('form-length');
-		var cfg = window.NP_PRICE;
-
-		var update = function () {
-			var m = parseInt(range.value, 10) || 1;
-			var price = Math.ceil(m / cfg.block) * cfg.price;
-			out.textContent = m;
-			total.innerHTML = '<span class="num">' + (Math.round(price) === price ? String(price) : price.toFixed(2)) + '</span><span class="cur">₪</span>';
-			range.style.setProperty('--p', ((m - range.min) / (range.max - range.min || 1)) * 100 + '%');
-		};
-		range.addEventListener('input', update);
-		update();
-
-		if (cta && formLength) {
-			cta.addEventListener('click', function () {
-				formLength.value = range.value;
-			});
-		}
-	}
+	// Package buttons preselect the package in the contact form.
+	var pkgSelect = document.getElementById('form-package');
+	document.querySelectorAll('[data-package]').forEach(function (btn) {
+		btn.addEventListener('click', function () {
+			if (pkgSelect) pkgSelect.value = btn.getAttribute('data-package');
+		});
+	});
 
 	// Reveal on scroll.
 	var items = document.querySelectorAll('.reveal');
