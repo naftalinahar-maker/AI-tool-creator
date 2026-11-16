@@ -27,7 +27,6 @@ function np_defaults() {
 		'np_tiktok'          => '',
 		'np_youtube'         => '',
 		'np_facebook'        => '',
-		'np_videos'          => '',
 		'np_about'           => '',
 		'np_autoreply'       => "שלום {name},\n\nתודה שפנית לנחמן הפקות! קיבלנו את הבקשה שלך לעריכת סרט.\n\nכדי שנוכל להתחיל, אפשר פשוט להשיב למייל הזה ולצרף את החומרים לסרט:\n• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n• מוזיקה, אם יש שיר מסוים שרוצים\n• טקסטים, כתוביות או שמות שצריכים להופיע\n• כל הערה על הסגנון שאתם רוצים\n\nהחבילה שבחרת: {price}\n\nנחזור אליך בהקדם,\nנחמן הפקות",
 	);
@@ -51,7 +50,7 @@ function np_customize_register( $wp_customize ) {
 		array(
 			'title'       => 'פרטי העסק – נחמן הפקות',
 			'priority'    => 20,
-			'description' => 'כאן מעדכנים מחירים, מייל, רשתות חברתיות וסרטונים לתיק העבודות. שדה ריק פשוט לא יוצג באתר.',
+			'description' => 'כאן מעדכנים מחירים, מייל, רשתות חברתיות. שדה ריק פשוט לא יוצג באתר.',
 		)
 	);
 
@@ -68,7 +67,6 @@ function np_customize_register( $wp_customize ) {
 		'np_tiktok'          => array( 'קישור לטיקטוק', 'url', 'esc_url_raw' ),
 		'np_youtube'         => array( 'קישור לערוץ יוטיוב', 'url', 'esc_url_raw' ),
 		'np_facebook'        => array( 'קישור לפייסבוק', 'url', 'esc_url_raw' ),
-		'np_videos'          => array( 'תיק עבודות – קישורי יוטיוב/וימאו, קישור בכל שורה', 'textarea', 'np_sanitize_lines' ),
 		'np_about'           => array( 'קצת על נחמן (אופציונלי)', 'textarea', 'sanitize_textarea_field' ),
 		'np_autoreply_on'    => array( 'לשלוח ללקוח מייל תשובה אוטומטי', 'checkbox', 'wp_validate_boolean' ),
 		'np_autoreply'       => array( 'נוסח המייל האוטומטי. אפשר להשתמש ב-{name} (שם הלקוח) וב-{price} (החבילה והמחיר)', 'textarea', 'sanitize_textarea_field' ),

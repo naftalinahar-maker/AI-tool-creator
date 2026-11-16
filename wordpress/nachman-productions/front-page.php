@@ -41,7 +41,6 @@ $np_faq = array(
 	array( 'כמה זמן לוקח לקבל את הסרט?', 'תלוי באורך הסרט ובכמות החומרים. כשתשלחו פרטים תקבלו הערכת זמן מדויקת.' ),
 );
 
-$np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_videos' ) ) );
 ?>
 
 <main id="main">
@@ -167,7 +166,7 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 	</section>
 
 	<!-- PROCESS -->
-	<section class="section" id="process">
+	<section class="section section--dark" id="process">
 		<div class="container">
 			<header class="section__head">
 				<p class="eyebrow">איך זה עובד</p>
@@ -182,33 +181,6 @@ $np_videos = array_filter( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_vide
 					</li>
 				<?php endforeach; ?>
 			</ol>
-		</div>
-	</section>
-
-	<!-- WORK -->
-	<section class="section section--dark" id="work">
-		<div class="container">
-			<header class="section__head">
-				<p class="eyebrow">תיק עבודות</p>
-				<h2 class="section__title">קצת ממה שערכנו</h2>
-			</header>
-			<?php if ( $np_videos ) : ?>
-				<div class="grid grid--3 work">
-					<?php foreach ( $np_videos as $url ) : ?>
-						<?php $embed = wp_oembed_get( esc_url( $url ) ); ?>
-						<?php if ( $embed ) : ?>
-							<div class="work__item reveal"><?php echo $embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- oEmbed HTML from WordPress. ?></div>
-						<?php endif; ?>
-					<?php endforeach; ?>
-				</div>
-			<?php else : ?>
-				<div class="work__empty">
-					<p>סרטים לדוגמה יעלו לכאן בקרוב.</p>
-					<?php if ( current_user_can( 'edit_theme_options' ) ) : ?>
-						<p class="work__hint">מנהל/ת: הוסיפו קישורי יוטיוב בהתאמה אישית ← פרטי העסק ← תיק עבודות.</p>
-					<?php endif; ?>
-				</div>
-			<?php endif; ?>
 		</div>
 	</section>
 

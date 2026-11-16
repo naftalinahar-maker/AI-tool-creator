@@ -88,7 +88,6 @@ function np_fallback_menu() {
 		'#services' => 'שירותים',
 		'#pricing'  => 'מחירים',
 		'#process'  => 'איך זה עובד',
-		'#work'     => 'עבודות',
 		'#faq'      => 'שאלות נפוצות',
 		'#contact'  => 'צור קשר',
 	);
