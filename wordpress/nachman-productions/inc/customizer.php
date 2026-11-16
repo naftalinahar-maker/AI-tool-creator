@@ -18,7 +18,7 @@ function np_defaults() {
 		'np_hero_text'       => 'כל סוגי הסרטים עד חצי שעה, בעריכה משולבת AI ובאיכות 4K. שולחים חומרים ומקבלים סרט ערוך ומוכן, בלי חבילות מסובכות ובלי הפתעות במחיר.',
 		'np_price_single'    => '20',
 		'np_price_pack10'    => '180',
-		'np_price_pack20'    => '250',
+		'np_price_pack20'    => '350',
 		'np_autoreply_on'    => false,
 		'np_max_minutes'     => '30',
 		'np_email'           => 'naftalinahar@gmail.com',
