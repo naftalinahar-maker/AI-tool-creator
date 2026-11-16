@@ -29,6 +29,9 @@ $np_socials = array_filter(
 		<div>
 			<h3 class="site-footer__title">יצירת קשר</h3>
 			<ul class="site-footer__list">
+				<?php if ( np_opt( 'np_phone' ) ) : ?>
+					<li><a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', np_opt( 'np_phone' ) ) ); ?>">📞 <?php echo esc_html( np_opt( 'np_phone' ) ); ?></a></li>
+				<?php endif; ?>
 				<?php if ( np_opt( 'np_email' ) ) : ?>
 					<li><a href="mailto:<?php echo esc_attr( np_opt( 'np_email' ) ); ?>"><?php echo esc_html( np_opt( 'np_email' ) ); ?></a></li>
 				<?php endif; ?>
