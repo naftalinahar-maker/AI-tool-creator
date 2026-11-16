@@ -185,6 +185,7 @@ $np_faq = array(
 					</article>
 				<?php endforeach; ?>
 			</div>
+			<p class="plans__note">🔥 המחירים הכי זולים בשוק 🔥</p>
 		</div>
 	</section>
 
