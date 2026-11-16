@@ -32,6 +32,9 @@ $np_socials = array_filter(
 				<?php if ( np_opt( 'np_email' ) ) : ?>
 					<li><a href="mailto:<?php echo esc_attr( np_opt( 'np_email' ) ); ?>"><?php echo esc_html( np_opt( 'np_email' ) ); ?></a></li>
 				<?php endif; ?>
+				<?php if ( np_opt( 'np_wa_link' ) ) : ?>
+					<li><a class="site-footer__wa" href="<?php echo esc_url( np_opt( 'np_wa_link' ) ); ?>" target="_blank" rel="noopener"><?php echo np_wa_icon( 20 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> לפנייה ישירה בוואצאפ לחצו כאן</a></li>
+				<?php endif; ?>
 				<?php foreach ( $np_socials as $label => $url ) : ?>
 					<li><a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $label ); ?></a></li>
 				<?php endforeach; ?>

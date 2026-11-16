@@ -233,6 +233,13 @@ $np_faq = array(
 				<h2 class="section__title">מוכנים לסרט שלכם?</h2>
 				<p class="section__lead"><?php echo $np_auto ? 'משאירים שם ומייל, ומיד מקבלים מייל עם הוראות. משיבים עליו עם החומרים לסרט, ונחמן מתחיל לעבוד.' : 'משאירים שם ומייל, ונחמן יחזור אליכם במייל עם כל הפרטים.'; ?></p>
 
+				<?php if ( np_opt( 'np_wa_link' ) ) : ?>
+					<a class="wa-cta" href="<?php echo esc_url( np_opt( 'np_wa_link' ) ); ?>" target="_blank" rel="noopener">
+						<?php echo np_wa_icon( 52 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<span class="wa-cta__text"><strong>לפנייה ישירה בוואצאפ</strong><span>לחצו כאן</span></span>
+					</a>
+				<?php endif; ?>
+
 				<ul class="contact__list">
 					<?php if ( np_opt( 'np_email' ) ) : ?>
 						<li>✉️ <a href="mailto:<?php echo esc_attr( np_opt( 'np_email' ) ); ?>"><?php echo esc_html( np_opt( 'np_email' ) ); ?></a></li>

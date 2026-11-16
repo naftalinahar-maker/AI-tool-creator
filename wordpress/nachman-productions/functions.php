@@ -125,3 +125,13 @@ function np_favicon() {
 add_action( 'wp_head', 'np_favicon', 2 );
 add_action( 'admin_head', 'np_favicon', 2 );
 add_action( 'login_head', 'np_favicon', 2 );
+
+/**
+ * WhatsApp logo (inline SVG) for the direct-contact link.
+ */
+function np_wa_icon( $size = 44 ) {
+	return '<svg class="wa-icon" viewBox="0 0 48 48" width="' . (int) $size . '" height="' . (int) $size . '" aria-hidden="true" focusable="false">'
+		. '<circle cx="24" cy="24" r="24" fill="#25D366"/>'
+		. '<path fill="#fff" d="M24 10.5a13.4 13.4 0 0 0-11.5 20.3L10.6 37.5l6.9-1.8A13.4 13.4 0 1 0 24 10.5zm0 24.5c-2 0-4-.5-5.7-1.6l-.4-.2-4.1 1.1 1.1-4-.3-.4A11.1 11.1 0 1 1 24 35zm6.1-8.3c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2l-1 1.3c-.2.2-.4.3-.7.1a9.1 9.1 0 0 1-4.5-3.9c-.3-.6.3-.5 1-1.8.1-.2 0-.4 0-.6l-1-2.5c-.3-.7-.5-.6-.8-.6h-.6a1.2 1.2 0 0 0-.9.4 3.8 3.8 0 0 0-1.2 2.8 6.6 6.6 0 0 0 1.4 3.5 15.1 15.1 0 0 0 5.8 5.1c2.2.9 3 1 4.1.8a3.5 3.5 0 0 0 2.3-1.6 2.8 2.8 0 0 0 .2-1.6c-.1-.2-.3-.3-.6-.4z"/>'
+		. '</svg>';
+}
