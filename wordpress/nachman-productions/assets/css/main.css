@@ -322,7 +322,34 @@ p { margin: 0 0 1em; }
 .step__text { color: var(--muted); font-size: 16px; margin: 0; }
 
 /* ---------- About ---------- */
-.about__text { font-size: 18px; color: #e6dcd3; max-width: 760px; }
+.about { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; align-items: center; }
+@media (max-width: 900px) { .about { grid-template-columns: 1fr; gap: 36px; } }
+.about__media { position: relative; }
+.about__media::before {
+	content: ""; position: absolute; inset: -14px; z-index: 0; border-radius: 32px;
+	background: var(--fire); opacity: .35; filter: blur(30px);
+}
+.about__photo {
+	position: relative; z-index: 1; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+	border-radius: 24px; border: 1px solid rgba(255, 138, 31, .5);
+}
+.about__photo--logo { aspect-ratio: 16 / 9; }
+@media (max-width: 900px) { .about__photo { aspect-ratio: 16 / 10; } }
+.about__tag {
+	position: absolute; z-index: 2; bottom: 18px; right: 18px;
+	padding: 8px 16px; border-radius: 999px; direction: ltr;
+	background: rgba(11, 8, 7, .8); border: 1px solid rgba(255, 138, 31, .5);
+	font-family: var(--head); font-size: 15px; color: var(--fire-1); backdrop-filter: blur(6px);
+}
+.about__text { font-size: 18px; color: #e6dcd3; }
+.about__facts { list-style: none; margin: 28px 0 32px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 480px) { .about__facts { grid-template-columns: repeat(2, 1fr); } }
+.about__facts li {
+	display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 16px 8px; text-align: center;
+	border-radius: 16px; background: var(--bg-3); border: 1px solid var(--line);
+}
+.about__facts strong { font-weight: 900; font-size: 28px; line-height: 1.1; background: var(--fire); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.about__facts span { color: var(--muted); font-size: 14px; }
 
 /* ---------- FAQ ---------- */
 .faq { display: grid; gap: 12px; }
@@ -413,3 +440,5 @@ p { margin: 0 0 1em; }
 .cur { font-size: .55em; font-weight: 500; margin-inline-start: .12em; }
 .hero__price-num .cur, .strip strong .cur { -webkit-text-fill-color: var(--fire-2); }
 .section--dark .step { background: var(--bg-3); }
+
+.section--dark .faq__item, .section--dark .plan:not(.plan--best) { background: var(--bg-3); }

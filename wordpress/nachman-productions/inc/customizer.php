@@ -27,7 +27,9 @@ function np_defaults() {
 		'np_tiktok'          => '',
 		'np_youtube'         => '',
 		'np_facebook'        => '',
-		'np_about'           => '',
+		'np_about_title'     => 'היי, אני נחמן 👋',
+		'np_about'           => "אני עורך סרטים, ואני מאמין שלכל אחד מגיע סרט ערוך ויפה בלי לשלם על זה הון.\n\nאני עובד עם ארבעה כלי עריכה ביחד, ומשלב בינה מלאכותית בכל עריכה. ככה אני עובד מהר, שומר על איכות של עד 4K, ויכול להציע מחירים שקשה להאמין להם.\n\nכל סרט שמגיע אליי מקבל יחס אישי: אני מקשיב למה שאתם רוצים, ועורך אותו כאילו הוא שלי.",
+		'np_about_photo'     => '',
 		'np_autoreply'       => "שלום {name},\n\nתודה שפנית לנחמן הפקות! קיבלנו את הבקשה שלך לעריכת סרט.\n\nכדי שנוכל להתחיל, אפשר פשוט להשיב למייל הזה ולצרף את החומרים לסרט:\n• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n• מוזיקה, אם יש שיר מסוים שרוצים\n• טקסטים, כתוביות או שמות שצריכים להופיע\n• כל הערה על הסגנון שאתם רוצים\n\nהחבילה שבחרת: {price}\n\nנחזור אליך בהקדם,\nנחמן הפקות",
 	);
 }
@@ -67,12 +69,28 @@ function np_customize_register( $wp_customize ) {
 		'np_tiktok'          => array( 'קישור לטיקטוק', 'url', 'esc_url_raw' ),
 		'np_youtube'         => array( 'קישור לערוץ יוטיוב', 'url', 'esc_url_raw' ),
 		'np_facebook'        => array( 'קישור לפייסבוק', 'url', 'esc_url_raw' ),
-		'np_about'           => array( 'קצת על נחמן (אופציונלי)', 'textarea', 'sanitize_textarea_field' ),
+		'np_about_title'     => array( 'מי אני – כותרת', 'text', 'sanitize_text_field' ),
+		'np_about'           => array( 'מי אני – טקסט (שורה ריקה = פסקה חדשה)', 'textarea', 'sanitize_textarea_field' ),
 		'np_autoreply_on'    => array( 'לשלוח ללקוח מייל תשובה אוטומטי', 'checkbox', 'wp_validate_boolean' ),
 		'np_autoreply'       => array( 'נוסח המייל האוטומטי. אפשר להשתמש ב-{name} (שם הלקוח) וב-{price} (החבילה והמחיר)', 'textarea', 'sanitize_textarea_field' ),
 	);
 
 	$defaults = np_defaults();
+
+	$wp_customize->add_setting( 'np_about_photo', array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+	$wp_customize->add_control(
+		new WP_Customize_Image_Control(
+			$wp_customize,
+			'np_about_photo',
+			array(
+				'label'       => 'מי אני – תמונה של נחמן',
+				'description' => 'אם לא מעלים תמונה, מוצג הלוגו.',
+				'section'     => 'np_business',
+				'priority'    => 200,
+			)
+		)
+	);
+
 	foreach ( $fields as $key => $f ) {
 		$wp_customize->add_setting(
 			$key,

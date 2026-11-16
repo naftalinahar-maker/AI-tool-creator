@@ -97,8 +97,35 @@ $np_faq = array(
 		</div>
 	</section>
 
+	<!-- ABOUT -->
+	<section class="section section--dark" id="about">
+		<div class="container about">
+			<div class="about__media reveal">
+				<?php $np_photo = np_opt( 'np_about_photo' ); ?>
+				<?php if ( $np_photo ) : ?>
+					<img class="about__photo" src="<?php echo esc_url( $np_photo ); ?>" alt="נחמן – נחמן הפקות" loading="lazy">
+					<span class="about__tag">Nachman Productions</span>
+				<?php else : ?>
+					<img class="about__photo about__photo--logo" src="<?php echo np_img( 'hero.jpg' ); ?>" alt="הלוגו של נחמן הפקות" width="1280" height="720" loading="lazy">
+				<?php endif; ?>
+			</div>
+			<div class="about__body">
+				<p class="eyebrow">מי אני</p>
+				<h2 class="section__title"><?php echo esc_html( np_opt( 'np_about_title' ) ); ?></h2>
+				<div class="about__text"><?php echo wp_kses_post( wpautop( np_opt( 'np_about' ) ) ); ?></div>
+				<ul class="about__facts">
+					<li><strong>כל</strong><span>סוגי הסרטים</span></li>
+					<li><strong>4</strong><span>כלי עריכה</span></li>
+					<li><strong>AI</strong><span>בכל עריכה</span></li>
+					<li><strong>4K</strong><span>איכות</span></li>
+				</ul>
+				<a class="btn btn--fire" href="#contact">בואו נעבוד יחד</a>
+			</div>
+		</div>
+	</section>
+
 	<!-- TOOLS -->
-	<section class="section section--dark" id="tools">
+	<section class="section" id="tools">
 		<div class="container tools">
 			<div class="tools__info">
 				<p class="eyebrow">איך זה זול ומקצועי בו זמנית?</p>
@@ -125,7 +152,7 @@ $np_faq = array(
 	</section>
 
 	<!-- PRICING -->
-	<section class="section" id="pricing">
+	<section class="section section--dark" id="pricing">
 		<div class="container">
 			<header class="section__head">
 				<p class="eyebrow">מחירון</p>
@@ -166,7 +193,7 @@ $np_faq = array(
 	</section>
 
 	<!-- PROCESS -->
-	<section class="section section--dark" id="process">
+	<section class="section" id="process">
 		<div class="container">
 			<header class="section__head">
 				<p class="eyebrow">איך זה עובד</p>
@@ -184,19 +211,8 @@ $np_faq = array(
 		</div>
 	</section>
 
-	<?php if ( np_opt( 'np_about' ) ) : ?>
-	<!-- ABOUT -->
-	<section class="section" id="about">
-		<div class="container about">
-			<p class="eyebrow">נעים מאוד</p>
-			<h2 class="section__title">קצת עליי</h2>
-			<div class="about__text"><?php echo wp_kses_post( wpautop( np_opt( 'np_about' ) ) ); ?></div>
-		</div>
-	</section>
-	<?php endif; ?>
-
 	<!-- FAQ -->
-	<section class="section" id="faq">
+	<section class="section section--dark" id="faq">
 		<div class="container container--narrow">
 			<header class="section__head">
 				<p class="eyebrow">שאלות נפוצות</p>

@@ -86,6 +86,7 @@ function np_fallback_menu() {
 	$home  = home_url( '/' );
 	$items = array(
 		'#services' => 'שירותים',
+		'#about'    => 'מי אני',
 		'#pricing'  => 'מחירים',
 		'#process'  => 'איך זה עובד',
 		'#faq'      => 'שאלות נפוצות',
