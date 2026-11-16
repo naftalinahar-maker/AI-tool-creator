@@ -225,7 +225,7 @@ p { margin: 0 0 1em; }
 .strip__inner > div { padding: 26px 10px; display: flex; flex-direction: column; gap: 2px; }
 .strip__inner > div + div { border-right: 1px solid var(--line); }
 .strip strong { font-family: var(--head); font-weight: 400; font-size: 32px; line-height: 1.1; background: var(--fire); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.strip span { color: var(--muted); font-size: 15px; }
+.strip strong + span { color: var(--muted); font-size: 15px; }
 @media (max-width: 760px) {
 	.strip__inner { grid-template-columns: repeat(2, 1fr); }
 	.strip__inner > div:nth-child(odd) { border-right: 0; }
