@@ -20,3 +20,8 @@
 - **WP Mail SMTP**, כדי שמיילים מהטופס יגיעו בצורה אמינה.
 - **Rank Math** או **Yoast SEO** לקידום בגוגל.
 - תוסף קאשינג (למשל **LiteSpeed Cache** או **WP Super Cache**).
+
+## גרסה חינמית ב-Netlify
+האתר מפורסם גם כאתר סטטי בחינם: https://nachman-productions.netlify.app
+- הקבצים נמצאים בתיקייה `netlify-site/`. הם נבנים מוורדפרס מקומי בעזרת `wordpress/build-netlify.py`.
+- הטופס עובד דרך Netlify Forms. כל פנייה נשלחת למייל של נחמן ומופיעה גם בלוח הבקרה של Netlify, תחת Forms.
