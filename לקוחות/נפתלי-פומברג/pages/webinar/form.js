@@ -2,8 +2,8 @@
 // הפונקציה (/.netlify/functions/subscribe) מוסיפה את הנרשם לרשימה בסמוב.
 // מפתח הגישה של סמוב לא נמצא כאן, רק במשתני הסביבה של השרת.
 (function () {
-  var ENDPOINT = '/.netlify/functions/subscribe';
-  var THANK_YOU = 'thank-you.html';
+  var ENDPOINT = window.WEBINAR_ENDPOINT || '/.netlify/functions/subscribe';
+  var THANK_YOU = window.WEBINAR_THANK_YOU || 'thank-you.html';
 
   function normPhone(v) {
     var d = (v || '').replace(/[^\d+]/g, '');

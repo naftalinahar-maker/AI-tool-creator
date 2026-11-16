@@ -9,9 +9,13 @@
 
 const SMOOVE_URL = 'https://rest.smoove.io/v1/Contacts?updateIfExists=true';
 
+// הדף יכול לשבת גם באתר הוורדפרס, ולשלוח לכאן מכתובת אחרת
+const ALLOWED_ORIGINS = ['https://www.naftalihafakot.co.il', 'https://naftalihafakot.co.il'];
+let corsHeaders = {};
+
 const json = (statusCode, body) => ({
   statusCode,
-  headers: { 'content-type': 'application/json; charset=utf-8' },
+  headers: { 'content-type': 'application/json; charset=utf-8', ...corsHeaders },
   body: JSON.stringify(body)
 });
 
@@ -23,6 +27,11 @@ function normPhone(v) {
 }
 
 export const handler = async (event) => {
+  const origin = (event.headers && (event.headers.origin || event.headers.Origin)) || '';
+  corsHeaders = ALLOWED_ORIGINS.includes(origin)
+    ? { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', Vary: 'Origin' }
+    : {};
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: corsHeaders, body: '' };
   if (event.httpMethod !== 'POST') return json(405, { ok: false });
 
   let data;
