@@ -91,19 +91,26 @@ head = (f'<link rel="preload" href="{BASE}fonts/heebo-hebrew-800-normal.woff2" a
 # 2. דף הנחיתה
 idx = (ROOT / 'index.html').read_text(encoding='utf-8')
 b = absolutize(body_of(idx))
+b = re.sub(r'<noscript>.*?</noscript>\s*', '', b, flags=re.S)
 b = b.replace(f'<script src="{BASE}form.js"></script>',
               f'<script>window.WEBINAR_ENDPOINT="{ENDPOINT}";window.WEBINAR_THANK_YOU="{THANK_YOU}";</script>\n<script src="{BASE}form.js"></script>')
 (HERE / 'landing-snippet.html').write_text(
     '<!-- דף נחיתה: להשפיע בענק על העולם. נוצר אוטומטית על ידי build.py. הפיקסל של מטא כבר נטען באתר. -->\n'
     + head + '<div class="fw">\n' + b.strip() + '\n</div>\n', encoding='utf-8')
 
-# 3. עמוד התודה, עם אירוע ההמרה של הפיקסל
+# 3. עמוד התודה, עם אירועי ההמרה (פיקסל מטא ו־Google Ads; שני התגים כבר נטענים באתר)
 tb = absolutize(body_of(ty))
+tb = re.sub(r'<noscript>.*?</noscript>\s*', '', tb, flags=re.S)
+tb = re.sub(r'<script>\s*// המרה של Google Ads.*?</script>\s*', '', tb, flags=re.S)
 tb = re.sub(r'<script>\s*try\{var n=sessionStorage.*?</script>', '', tb, flags=re.S)
 lead = """<script>
 (function(){try{var n=sessionStorage.getItem('reg_name');if(n){document.getElementById('hi').textContent=n;}}catch(_){}
 var done=false;function lead(){if(done)return;if(window.fbq){done=true;fbq('track','Lead',{content_name:'webinar-27-12'});}}
-lead();window.addEventListener('load',lead);setTimeout(lead,2500);})();
+lead();window.addEventListener('load',lead);setTimeout(lead,2500);
+// המרה של Google Ads: להכניס כאן את תווית ההמרה (Conversion label)
+var GADS_CONVERSION_LABEL='';
+function gads(){if(GADS_CONVERSION_LABEL&&window.gtag){gtag('event','conversion',{send_to:'AW-480132115/'+GADS_CONVERSION_LABEL});return true;}}
+if(!gads())window.addEventListener('load',gads);})();
 </script>"""
 (HERE / 'thank-you-snippet.html').write_text(
     '<!-- עמוד תודה לוובינר. נוצר אוטומטית על ידי build.py -->\n'

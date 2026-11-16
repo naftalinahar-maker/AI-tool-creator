@@ -31,5 +31,9 @@
 <script>
 (function(){try{var n=sessionStorage.getItem('reg_name');if(n){document.getElementById('hi').textContent=n;}}catch(_){}
 var done=false;function lead(){if(done)return;if(window.fbq){done=true;fbq('track','Lead',{content_name:'webinar-27-12'});}}
-lead();window.addEventListener('load',lead);setTimeout(lead,2500);})();
+lead();window.addEventListener('load',lead);setTimeout(lead,2500);
+// המרה של Google Ads: להכניס כאן את תווית ההמרה (Conversion label)
+var GADS_CONVERSION_LABEL='';
+function gads(){if(GADS_CONVERSION_LABEL&&window.gtag){gtag('event','conversion',{send_to:'AW-480132115/'+GADS_CONVERSION_LABEL});return true;}}
+if(!gads())window.addEventListener('load',gads);})();
 </script>

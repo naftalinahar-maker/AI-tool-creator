@@ -37,8 +37,13 @@
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init','244640523511261');fbq('track','PageView');fbq('track','Lead',{content_name:'webinar-27-12'});
 </script>
+<!-- Google Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-480132115"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-480132115');</script>
 </head>
 <body class="dark">
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=244640523511261&ev=PageView&noscript=1"></noscript>
+
 <div class="wrap ty">
   <header><img src="img/fomberg-logo.png" alt="פומברג" width="124" height="20"></header>
   <main>
@@ -66,6 +71,11 @@ fbq('init','244640523511261');fbq('track','PageView');fbq('track','Lead',{conten
 </div>
 <script>
 try{var n=sessionStorage.getItem('reg_name');if(n){document.getElementById('hi').textContent=n;}}catch(_){}
+</script>
+<script>
+// המרה של Google Ads: להכניס כאן את תווית ההמרה (Conversion label) מחשבון Google Ads
+var GADS_CONVERSION_LABEL='';
+if(GADS_CONVERSION_LABEL&&window.gtag){gtag('event','conversion',{send_to:'AW-480132115/'+GADS_CONVERSION_LABEL});}
 </script>
 </body>
 </html>
