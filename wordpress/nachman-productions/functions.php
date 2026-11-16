@@ -109,3 +109,19 @@ function np_body_classes( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'np_body_classes' );
+
+/**
+ * Default browser-tab icon (the dragon from the logo).
+ * If an icon is set in Customize → Site Identity → Site Icon, WordPress uses that instead.
+ */
+function np_favicon() {
+	if ( has_site_icon() ) {
+		return;
+	}
+	printf( '<link rel="icon" href="%s" sizes="any">' . "\n", np_img( 'favicon.ico' ) );
+	printf( '<link rel="icon" type="image/png" sizes="32x32" href="%s">' . "\n", np_img( 'favicon-32.png' ) );
+	printf( '<link rel="apple-touch-icon" href="%s">' . "\n", np_img( 'apple-touch-icon.png' ) );
+}
+add_action( 'wp_head', 'np_favicon', 2 );
+add_action( 'admin_head', 'np_favicon', 2 );
+add_action( 'login_head', 'np_favicon', 2 );
