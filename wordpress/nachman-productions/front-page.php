@@ -121,8 +121,31 @@ $np_faq = array(
 		</div>
 	</section>
 
+	<?php $np_vids = np_videos(); ?>
+	<?php if ( $np_vids ) : ?>
+	<!-- VIDEOS -->
+	<section class="section" id="videos">
+		<div class="container">
+			<header class="section__head">
+				<p class="eyebrow">סרטונים לדוגמה</p>
+				<h2 class="section__title">ככה זה נראה <span class="text-fire">אחרי עריכה</span></h2>
+			</header>
+			<div class="videos<?php echo 1 === count( $np_vids ) ? ' videos--single' : ''; ?>">
+				<?php foreach ( $np_vids as $v ) : ?>
+					<figure class="video reveal">
+						<div class="video__frame">
+							<iframe src="<?php echo esc_url( $v[0] ); ?>" title="<?php echo esc_attr( $v[1] ? $v[1] : 'סרטון לדוגמה' ); ?>" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+						</div>
+						<?php if ( $v[1] ) : ?><figcaption class="video__title"><?php echo esc_html( $v[1] ); ?></figcaption><?php endif; ?>
+					</figure>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+	<?php endif; ?>
+
 	<!-- TOOLS -->
-	<section class="section" id="tools">
+	<section class="section section--dark" id="tools">
 		<div class="container tools">
 			<div class="tools__info">
 				<p class="eyebrow">איך זה זול ומקצועי בו זמנית?</p>
@@ -149,7 +172,7 @@ $np_faq = array(
 	</section>
 
 	<!-- PRICING -->
-	<section class="section section--dark" id="pricing">
+	<section class="section" id="pricing">
 		<div class="container">
 			<header class="section__head">
 				<p class="eyebrow">מחירון</p>
@@ -191,7 +214,7 @@ $np_faq = array(
 	</section>
 
 	<!-- PROCESS -->
-	<section class="section" id="process">
+	<section class="section section--dark" id="process">
 		<div class="container">
 			<header class="section__head">
 				<p class="eyebrow">איך זה עובד</p>
@@ -210,7 +233,7 @@ $np_faq = array(
 	</section>
 
 	<!-- FAQ -->
-	<section class="section section--dark" id="faq">
+	<section class="section" id="faq">
 		<div class="container container--narrow">
 			<header class="section__head">
 				<p class="eyebrow">שאלות נפוצות</p>
