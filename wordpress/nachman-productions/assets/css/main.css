@@ -322,24 +322,15 @@ p { margin: 0 0 1em; }
 .step__text { color: var(--muted); font-size: 16px; margin: 0; }
 
 /* ---------- About ---------- */
-.about { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; align-items: center; }
-/* Photo stays beside the text at every width. On narrow screens the facts and button span the full width below. */
-@media (max-width: 900px) {
-	.about { grid-template-columns: 40% 1fr; gap: 14px 16px; align-items: start; }
-	.about__body { display: contents; }
-	.about__media { grid-column: 1; grid-row: 1 / span 3; }
-	.about__media::before { inset: -6px; filter: blur(18px); }
-	.about__body > .eyebrow, .about__body > .section__title, .about__body > .about__text { grid-column: 2; }
-	.about__body > .eyebrow { margin: 0; }
-	.about__body > .section__title { margin: 0; font-size: clamp(22px, 5.6vw, 34px); }
-	.about__text { font-size: 15.5px; line-height: 1.65; }
-	.about__text p { margin-bottom: .8em; }
-	.about__facts, .about__body > .btn { grid-column: 1 / -1; }
-	.about__facts { margin: 6px 0 0; }
-	.about__body > .btn { justify-self: start; }
-	.about__photo { border-radius: 16px; }
-	.about__tag { display: none; }
-}
+/* Same layout at every width: photo beside the heading and text (top-aligned), facts and button full width below. */
+.about { display: grid; grid-template-columns: 34% 1fr; grid-template-rows: auto auto 1fr; gap: 18px 56px; align-items: start; }
+.about__body { display: contents; }
+.about__media { grid-column: 1; grid-row: 1 / span 3; }
+.about__body > .eyebrow, .about__body > .section__title, .about__body > .about__text { grid-column: 2; }
+.about__body > .eyebrow { margin: 0; }
+.about__body > .section__title { margin: 0; }
+.about__facts, .about__body > .btn { grid-column: 1 / -1; }
+.about__body > .btn { justify-self: start; }
 .about__media { position: relative; }
 .about__media::before {
 	content: ""; position: absolute; inset: -14px; z-index: 0; border-radius: 32px;
@@ -358,7 +349,7 @@ p { margin: 0 0 1em; }
 	font-family: var(--head); font-size: 15px; color: var(--fire-1); backdrop-filter: blur(6px);
 }
 .about__text { font-size: 18px; color: #e6dcd3; }
-.about__facts { list-style: none; margin: 28px 0 32px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.about__facts { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 @media (max-width: 480px) { .about__facts { grid-template-columns: repeat(2, 1fr); } }
 .about__facts li {
 	display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 16px 8px; text-align: center;
@@ -366,6 +357,16 @@ p { margin: 0 0 1em; }
 }
 .about__facts strong { font-weight: 900; font-size: 28px; line-height: 1.1; background: var(--fire); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .about__facts span { color: var(--muted); font-size: 14px; }
+@media (max-width: 900px) {
+	.about { grid-template-columns: 40% 1fr; gap: 14px 16px; }
+	.about__media::before { inset: -6px; filter: blur(18px); }
+	.about__body > .section__title { font-size: clamp(22px, 5.6vw, 34px); }
+	.about__text { font-size: 15.5px; line-height: 1.65; }
+	.about__text p { margin-bottom: .8em; }
+	.about__facts { margin: 6px 0 0; }
+	.about__photo { border-radius: 16px; }
+	.about__tag { display: none; }
+}
 
 /* ---------- FAQ ---------- */
 .faq { display: grid; gap: 12px; }
