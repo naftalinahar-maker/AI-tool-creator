@@ -7,6 +7,7 @@ form converted to a Netlify Form (submissions are emailed by Netlify).
 
 Usage: python3 build-netlify.py <rendered-home.html> <wp-base-url> <out-dir>
 """
+import hashlib
 import html
 import re
 import shutil
@@ -46,7 +47,14 @@ def main(src, base, out):
 
     # --- Paths.
     page = page.replace(theme_url, "/assets/")
-    page = re.sub(r"(/assets/[^\"'?]+)\?ver=[^\"']*", r"\1", page)
+    # Cache-busting: each CSS/JS/image URL gets a hash of its content, so browsers
+    # always load the new file after an update.
+    def _bust(m):
+        rel = m.group(1)
+        f = THEME / rel.lstrip("/")
+        tag = hashlib.md5(f.read_bytes()).hexdigest()[:10] if f.is_file() else "1"
+        return f"{rel}?v={tag}"
+    page = re.sub(r"(/assets/[^\"'?)\s]+)(?:\?[^\"')\s]*)?", _bust, page)
     page = page.replace(base.rstrip("/") + "/#", "/#").replace(base.rstrip("/") + "/", "/")
 
     # --- Contact form → Netlify Form.
@@ -135,9 +143,9 @@ NETLIFY_JS = """/* Netlify Forms: submit without leaving the page. */
 """
 
 NETLIFY_TOML = """[[headers]]
-  for = "/assets/*"
+  for = "/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "public, max-age=0, must-revalidate"
 """
 
 NOT_FOUND = """<!doctype html>
