@@ -309,8 +309,9 @@ p { margin: 0 0 1em; }
 .plan__list li::before { content: "✓"; position: absolute; right: 0; color: var(--fire-2); font-weight: 900; }
 
 /* ---------- Steps ---------- */
-.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: s; }
-@media (max-width: 960px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; counter-reset: s; }
+@media (max-width: 1100px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px) { .steps { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
 .step { position: relative; padding: 28px 24px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); }
 .step__num {
