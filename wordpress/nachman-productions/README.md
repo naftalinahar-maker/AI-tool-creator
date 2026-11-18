@@ -25,3 +25,9 @@
 האתר מפורסם גם כאתר סטטי בחינם: https://nachman-productions.netlify.app
 - הקבצים נמצאים בתיקייה `netlify-site/`. הם נבנים מוורדפרס מקומי בעזרת `wordpress/build-netlify.py`.
 - הטופס עובד דרך Netlify Forms. כל פנייה נשלחת למייל של נחמן ומופיעה גם בלוח הבקרה של Netlify, תחת Forms.
+
+## גרסה חינמית ב-GitHub Pages
+עותק נוסף של האתר נמצא בתיקייה `docs/`. הוא נבנה מ-`netlify-site/` בעזרת `wordpress/build-pages.py`.
+- הפעלה (פעם אחת): ב-GitHub, בריפו, Settings ← Pages ← Deploy from a branch. בוחרים את הענף ואת התיקייה `/docs`, ולוחצים Save.
+- הכתובת: https://naftalinahar-maker.github.io/AI-tool-creator/
+- הטופס עובד דרך FormSubmit. בפנייה הראשונה מגיע מייל אישור, וצריך ללחוץ בו על Activate.
