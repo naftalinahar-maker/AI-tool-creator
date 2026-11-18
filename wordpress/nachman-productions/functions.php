@@ -87,7 +87,6 @@ function np_fallback_menu() {
 	$items = array(
 		'#services' => 'שירותים',
 		'#about'    => 'מי אני',
-		'#videos'   => 'סרטונים',
 		'#pricing'  => 'מחירים',
 		'#process'  => 'איך זה עובד',
 		'#faq'      => 'שאלות נפוצות',
@@ -135,27 +134,4 @@ function np_wa_icon( $size = 44 ) {
 		. '<circle cx="24" cy="24" r="24" fill="#25D366"/>'
 		. '<path fill="#fff" d="M24 10.5a13.4 13.4 0 0 0-11.5 20.3L10.6 37.5l6.9-1.8A13.4 13.4 0 1 0 24 10.5zm0 24.5c-2 0-4-.5-5.7-1.6l-.4-.2-4.1 1.1 1.1-4-.3-.4A11.1 11.1 0 1 1 24 35zm6.1-8.3c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2l-1 1.3c-.2.2-.4.3-.7.1a9.1 9.1 0 0 1-4.5-3.9c-.3-.6.3-.5 1-1.8.1-.2 0-.4 0-.6l-1-2.5c-.3-.7-.5-.6-.8-.6h-.6a1.2 1.2 0 0 0-.9.4 3.8 3.8 0 0 0-1.2 2.8 6.6 6.6 0 0 0 1.4 3.5 15.1 15.1 0 0 0 5.8 5.1c2.2.9 3 1 4.1.8a3.5 3.5 0 0 0 2.3-1.6 2.8 2.8 0 0 0 .2-1.6c-.1-.2-.3-.3-.6-.4z"/>'
 		. '</svg>';
-}
-
-/**
- * Sample videos from the Customizer: one per line, "URL | title".
- * Returns [ [embed_url, title], ... ] for Google Drive and YouTube links.
- */
-function np_videos() {
-	$out = array();
-	foreach ( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_videos' ) ) as $line ) {
-		$parts = array_map( 'trim', explode( '|', $line, 2 ) );
-		$url   = $parts[0];
-		$title = isset( $parts[1] ) ? $parts[1] : '';
-		$embed = '';
-		if ( preg_match( '~drive\.google\.com/(?:file/d/|open\?id=)([\w-]+)~', $url, $m ) ) {
-			$embed = 'https://drive.google.com/file/d/' . $m[1] . '/preview';
-		} elseif ( preg_match( '~(?:youtube\.com/(?:watch\?v=|shorts/|embed/)|youtu\.be/)([\w-]{11})~', $url, $m ) ) {
-			$embed = 'https://www.youtube-nocookie.com/embed/' . $m[1];
-		}
-		if ( $embed ) {
-			$out[] = array( $embed, $title );
-		}
-	}
-	return $out;
 }
