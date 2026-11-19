@@ -46,6 +46,18 @@ PAGES_JS = """/* Contact form via FormSubmit: submit without leaving the page. *
 """
 
 
+AUTORESPONSE = (
+    "תודה שפניתם לנחמן הפקות! קיבלנו את הבקשה שלכם לעריכת סרט.\n\n"
+    "כדי שנוכל להתחיל, שלחו לנו את החומרים לסרט למייל {email}:\n"
+    "• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n"
+    "• מוזיקה, אם יש שיר מסוים שרוצים\n"
+    "• טקסטים, כתוביות או שמות שצריכים להופיע\n"
+    "• כל הערה על הסגנון שאתם רוצים\n\n"
+    "נחזור אליכם בהקדם,\n"
+    "נחמן הפקות"
+)
+
+
 def convert(html, email):
     # Relative paths: the site lives under /<repo>/ on GitHub Pages.
     html = re.sub(r'(["\'(])/assets/', r"\1assets/", html)
@@ -63,7 +75,18 @@ def convert(html, email):
     html = html.replace(
         '<input type="hidden" name="form-name" value="contact">',
         '<input type="hidden" name="_template" value="table">'
-        '<input type="hidden" name="_captcha" value="false">',
+        '<input type="hidden" name="_captcha" value="false">'
+        # FormSubmit emails this text to the address in the form's "email" field.
+        '<input type="hidden" name="_autoresponse" value="'
+        + AUTORESPONSE.format(email=email).replace("\n", "&#10;") + '">',
+    )
+    html = html.replace(
+        "משאירים שם ומייל, ונחמן יחזור אליכם במייל עם כל הפרטים.",
+        "משאירים שם ומייל, ומיד מקבלים מייל עם הסבר איך לשלוח את החומרים לסרט.",
+    )
+    html = html.replace(
+        "תודה! הפנייה התקבלה, ונחמן יחזור אליכם במייל בהקדם.",
+        "תודה! הפנייה התקבלה. שלחנו לכם מייל עם הסבר איך לשלוח את החומרים (בדקו גם בספאם).",
     )
     html = html.replace('name="subject"', 'name="_subject"')
     html = html.replace('name="np_website"', 'name="_honey"')
