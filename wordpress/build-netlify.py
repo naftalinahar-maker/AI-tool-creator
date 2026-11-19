@@ -90,10 +90,13 @@ def main(src, base, out):
         page = page.replace(f'name="{old}"', f'name="{new}"')
 
     # Netlify-only script: AJAX submit + success message.
-    page = page.replace(
-        '<script src="/assets/js/main.js"',
-        '<script src="/assets/js/netlify-form.js" defer></script>\n<script src="/assets/js/main.js"',
+    page, n = re.subn(
+        r'<script src="/assets/js/main\.js',
+        '<script src="/assets/js/netlify-form.js" defer></script>\n<script src="/assets/js/main.js',
+        page,
+        count=1,
     )
+    assert n == 1, "main.js script tag not found"
     page = re.sub(r"<script>\s*window\._wpemojiSettings.*?</script>", "", page, flags=re.S)
 
     (out / "index.html").write_text(page, encoding="utf-8")

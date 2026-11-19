@@ -61,6 +61,9 @@ AUTORESPONSE = (
 )
 
 
+SITE_URL = "https://naftalinahar-maker.github.io/AI-tool-creator/"
+
+
 def convert(html, email):
     # Relative paths: the site lives under /<repo>/ on GitHub Pages.
     html = re.sub(r'(["\'(])/assets/', r"\1assets/", html)
@@ -79,6 +82,8 @@ def convert(html, email):
         '<input type="hidden" name="form-name" value="contact">',
         '<input type="hidden" name="_template" value="table">'
         '<input type="hidden" name="_captcha" value="false">'
+        # Without JavaScript the browser posts the form normally; come back to the site afterwards.
+        '<input type="hidden" name="_next" value="' + SITE_URL + '?np_sent=1#contact">'
         # FormSubmit emails this text to the address in the form's "email" field.
         '<input type="hidden" name="_autoresponse" value="'
         + AUTORESPONSE.format(email=email).replace("\n", "&#10;") + '">',
