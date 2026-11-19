@@ -1,0 +1,289 @@
+<!doctype html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ערכת Wix – נחמן הפקות</title>
+<style>
+	:root { --bg: #0b0807; --card: #1a120e; --line: #3a2a20; --text: #f4ede6; --muted: #b8aaa0; --fire: #ff8a1f; }
+	* { box-sizing: border-box; }
+	body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.7 "Heebo", system-ui, Arial, sans-serif; }
+	.wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+	h1 { font-size: 30px; margin: 0 0 4px; }
+	h2 { font-size: 22px; margin: 44px 0 12px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--fire); }
+	h3 { font-size: 17px; margin: 22px 0 8px; }
+	p, li { color: var(--muted); }
+	ol li { margin-bottom: 6px; }
+	b { color: var(--text); }
+	.blk { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin: 8px 0 14px; }
+	.lbl { font-size: 13px; color: var(--fire); padding: 10px 14px 0; font-weight: 700; }
+	pre { margin: 0; padding: 6px 14px 14px; white-space: pre-wrap; font: inherit; color: var(--text); }
+	button { position: absolute; top: 8px; left: 8px; background: var(--fire); color: #1a0a02; border: 0; border-radius: 999px; padding: 6px 14px; font: 700 14px/1 inherit; cursor: pointer; }
+	.sw { display: inline-flex; align-items: center; gap: 8px; margin: 4px 14px 4px 0; }
+	.sw i { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #555; display: inline-block; }
+	code { background: #2a1d15; padding: 1px 6px; border-radius: 6px; direction: ltr; unicode-bidi: isolate; }
+	img { max-width: 160px; border-radius: 10px; border: 1px solid var(--line); vertical-align: middle; margin-left: 10px; }
+	.imgs div { margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>ערכת Wix – נחמן הפקות 🎬</h1>
+<p>כל מה שצריך כדי לבנות את האתר ב-Wix. ליד כל טקסט יש כפתור <b>העתקה</b>: לוחצים, ומדביקים ב-Wix.</p>
+
+<h2>שלב 0: פותחים אתר ב-Wix</h2>
+<ol>
+	<li>להירשם ב-<b>wix.com</b> (אפשר עם חשבון גוגל).</li>
+	<li>ללחוץ <b>Create New Site</b> ← לבחור <b>Start from scratch / Blank</b>, או תבנית כהה שאוהבים.</li>
+	<li>לבחור <b>Wix Editor</b> (לא ADI).</li>
+	<li>בהגדרות האתר: <b>Settings ← Language &amp; Region ← Hebrew</b>. כך האתר יהיה מימין לשמאל.</li>
+	<li>להעלות את התמונות מהתיקייה <code>images</code> (רשימה למטה).</li>
+</ol>
+
+<h3>צבעים</h3>
+<p>
+	<span class="sw"><i style="background:#0b0807"></i><code>#0B0807</code> רקע</span>
+	<span class="sw"><i style="background:#1D1410"></i><code>#1D1410</code> כרטיסים</span>
+	<span class="sw"><i style="background:#F4EDE6"></i><code>#F4EDE6</code> טקסט</span>
+	<span class="sw"><i style="background:#B8AAA0"></i><code>#B8AAA0</code> טקסט משני</span>
+	<span class="sw"><i style="background:#FF8A1F"></i><code>#FF8A1F</code> כתום (כפתורים)</span>
+	<span class="sw"><i style="background:#FFCF5A"></i><code>#FFCF5A</code> צהוב</span>
+	<span class="sw"><i style="background:#E2410F"></i><code>#E2410F</code> אדום</span>
+</p>
+<h3>גופנים</h3>
+<p>כותרות: <b>Heebo Bold</b> (או Rubik Bold). טקסט רגיל: <b>Heebo</b>.</p>
+
+<h3>תמונות (בתיקייה images)</h3>
+<div class="imgs">
+	<div><img src="images/logo.jpg" alt=""> <code>logo.jpg</code> – לוגו לראש האתר ולתחתית</div>
+	<div><img src="images/hero.jpg" alt=""> <code>hero.jpg</code> – תמונת רקע לפתיחה</div>
+	<div><img src="images/nachman.jpg" alt=""> <code>nachman.jpg</code> – לפינת "מי אני"</div>
+	<div><img src="images/icon-512.png" alt=""> <code>icon-512.png</code> – סמל לכרטיסייה (Favicon, אפשרי ב-Wix רק בחבילה בתשלום)</div>
+</div>
+
+<h2>תפריט</h2>
+<div class="blk"><div class="lbl">פריטי תפריט (כל אחד מקשר לחלק בדף)</div><pre>שירותים
+מי אני
+סרטונים
+מחירים
+איך זה עובד
+שאלות נפוצות
+צור קשר</pre></div>
+<div class="blk"><div class="lbl">כפתור בתפריט</div><pre>הזמינו עריכה</pre></div>
+
+<h2>1. פתיחה</h2>
+<div class="blk"><div class="lbl">שורה קטנה מעל הכותרת</div><pre>נחמן הפקות · Nachman Productions</pre></div>
+<div class="blk"><div class="lbl">כותרת ראשית</div><pre>עריכת סרטים מקצועית במחיר שלא תאמינו</pre></div>
+<div class="blk"><div class="lbl">טקסט</div><pre>כל סוגי הסרטים עד חצי שעה, בעריכה משולבת AI ובאיכות 4K. שולחים חומרים ומקבלים סרט ערוך ומוכן, בלי חבילות מסובכות ובלי הפתעות במחיר.</pre></div>
+<div class="blk"><div class="lbl">תיבת מחיר</div><pre>₪20 לסרטון
+ובחבילה – עוד יותר זול.</pre></div>
+<div class="blk"><div class="lbl">כפתורים</div><pre>הזמינו עריכה עכשיו
+חשבו מחיר</pre></div>
+
+<h2>2. פס נתונים</h2>
+<div class="blk"><div class="lbl">5 נתונים (מספר גדול + שורה קטנה)</div><pre>כל – סוגי הסרטים
+עד 30 – דקות לסרט
+AI – עריכה משולבת בינה מלאכותית
+₪20 – לסרטון
+4K – איכות אולטרה HD</pre></div>
+
+<h2>3. שירותים</h2>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת</div><pre>מה אנחנו עורכים
+כל סוג של סרט. עד חצי שעה.</pre></div>
+<div class="blk"><div class="lbl">טקסט</div><pre>לא משנה אם צילמתם בטלפון או במצלמה מקצועית – שולחים חומרים ומקבלים סרט ערוך, מוכן לצפייה ולשיתוף.</pre></div>
+<div class="blk"><div class="lbl">8 כרטיסים</div><pre>🎉 אירועים ושמחות
+חתונות, בר ובת מצווה, ימי הולדת, בריתות ואירועי משפחה – הופכים שעות של צילומים לסרט מרגש.
+
+📱 רילס, טיקטוק ושורטס
+סרטונים קצרים וקצביים לרשתות, עם כתוביות, מוזיקה ומעברים שעוצרים את הגלילה.
+
+▶️ סרטוני יוטיוב
+עריכה מלאה לסרטוני ערוץ: חיתוכים, גרפיקה, כתוביות, מוזיקה ותיקון צבע.
+
+💼 סרטוני תדמית לעסקים
+סרטון שמציג את העסק שלכם בצורה מקצועית – לאתר, לרשתות ולפרסום.
+
+🖼️ מצגות תמונות ומזכרות
+תמונות וקטעי וידאו שהופכים לסרט מזכרת עם מוזיקה – למתנה, לאזכרה או לאירוע.
+
+✈️ טיולים וחופשות
+כל הקטעים מהטלפון מהחופשה הופכים לסרט אחד שכיף לראות שוב ושוב.
+
+🎓 הדרכות והרצאות
+עריכת שיעורים, הרצאות וסרטוני הסבר – ברור, נקי וקל לצפייה.
+
+🎬 כל סרט אחר
+יש לכם רעיון אחר? אם הסרט עד חצי שעה – אנחנו עורכים אותו.</pre></div>
+
+<h2>4. מי אני</h2>
+<p>תמונה: <code>nachman.jpg</code> בצד, והטקסט לידה.</p>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת</div><pre>מי אני
+היי, אני נחמן פומברג 👋</pre></div>
+<div class="blk"><div class="lbl">טקסט</div><pre>אני בן 10, הבן של נפתלי ותהילה פומברג, ואני עורך סרטים כבר שנה. בשנה הזאת ערכתי יותר מ-60 סרטים, ולמדתי מכל אחד מהם משהו חדש.
+
+אני מאמין שלכל אחד מגיע סרט ערוך ויפה, בלי לשלם על זה הון. בגלל זה המחירים שלי נמוכים במיוחד, אבל ההשקעה בכל סרט היא מלאה.
+
+אני עובד עם ארבעה כלי עריכה ביחד, ומשלב בינה מלאכותית בכל עריכה. ככה אני עובד מהר, שומר על איכות של עד 4K, ויכול להציע מחירים שקשה להאמין להם.
+
+כל סרט שמגיע אליי מקבל יחס אישי: אני מקשיב למה שאתם רוצים, ועורך אותו כאילו הוא שלי.</pre></div>
+<div class="blk"><div class="lbl">4 נתונים</div><pre>+60 – סרטים ערוכים
+שנה – של ניסיון
+4 – כלי עריכה
+4K – איכות + AI</pre></div>
+<div class="blk"><div class="lbl">כפתור</div><pre>בואו נעבוד יחד</pre></div>
+
+<h2>5. סרטונים לדוגמה</h2>
+<p>ב-Wix: <b>Add ← Video</b>, ולהעלות את "יום הולדת 40 לאמא" מהמחשב (או מיוטיוב, אם יעלה לשם).</p>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת + כיתוב לסרטון</div><pre>סרטונים לדוגמה
+ככה זה נראה אחרי עריכה
+יום הולדת 40 לאמא!</pre></div>
+
+<h2>6. כלים, AI ו-4K</h2>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת</div><pre>איך זה זול ומקצועי בו זמנית?
+עריכה משולבת AI, באיכות 4K</pre></div>
+<div class="blk"><div class="lbl">טקסט</div><pre>נחמן משלב כמה כלי עריכה מובילים ביחד ומשתמש בבינה מלאכותית כדי לעבוד מהר ומדויק. ככה המחיר נשאר נמוך והתוצאה נראית מקצועית.</pre></div>
+<div class="blk"><div class="lbl">רשימה עם ✓</div><pre>✓ ייצוא באיכות 4K
+✓ כתוביות אוטומטיות בעזרת AI
+✓ שיפור סאונד ותמונה חכם
+✓ אפקטים, טקסטים וגרפיקה</pre></div>
+<div class="blk"><div class="lbl">6 תיבות</div><pre>CapCut – עריכה, אפקטים ומעברים
+Canva – עיצוב, גרפיקה וטקסטים
+Clipchamp – עריכה וכתוביות
+Google Vids – סרטונים בעזרת AI
+4K – Ultra HD
+AI – בינה מלאכותית</pre></div>
+
+<h2>7. מחירון</h2>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת + טקסט</div><pre>מחירון
+מחירים שקופים. בלי אותיות קטנות.
+כל סרטון עד 30 דקות. ככה שיותר סרטונים, ככה כל סרטון יוצא זול יותר.</pre></div>
+<div class="blk"><div class="lbl">כרטיס 1</div><pre>סרטון בודד
+₪20
+לסרטון אחד
+✓ סרטון אחד, עד 30 דקות
+✓ עריכה מלאה בשילוב AI
+✓ איכות עד 4K
+✓ מוזיקה, כתוביות ומעברים
+[כפתור] אני רוצה את זה</pre></div>
+<div class="blk"><div class="lbl">כרטיס 2</div><pre>חבילת 10 סרטונים
+₪180
+₪18 לסרטון · חוסכים ₪20
+✓ 10 סרטונים, כל אחד עד 30 דקות
+✓ עריכה מלאה בשילוב AI
+✓ איכות עד 4K
+✓ מוזיקה, כתוביות ומעברים
+[כפתור] אני רוצה את זה</pre></div>
+<div class="blk"><div class="lbl">כרטיס 3 (מודגש, עם תווית "הכי משתלם")</div><pre>הכי משתלם
+חבילת 20 סרטונים
+₪350
+₪17.50 לסרטון · חוסכים ₪50
+✓ 20 סרטונים, כל אחד עד 30 דקות
+✓ עריכה מלאה בשילוב AI
+✓ איכות עד 4K
+✓ מוזיקה, כתוביות ומעברים
+[כפתור] אני רוצה את זה</pre></div>
+<div class="blk"><div class="lbl">שורה מתחת למחירון</div><pre>🔥 המחירים הכי זולים בשוק 🔥</pre></div>
+
+<h2>8. איך זה עובד</h2>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת</div><pre>איך זה עובד
+5 צעדים לסרט מוכן</pre></div>
+<div class="blk"><div class="lbl">5 צעדים</div><pre>1. בוחרים חבילה
+סרטון בודד או חבילה, ממלאים טופס קצר עם שם ומייל ומספרים על הסרטונים.
+
+2. שולחים חומרים
+נחמן חוזר אליכם במייל, ואתם משיבים עם הסרטונים, התמונות והמוזיקה (לקבצים גדולים: Google Drive או WeTransfer).
+
+3. עורכים בשבילכם
+נחמן עורך את הסרט: חיתוכים, מעברים, מוזיקה, כתוביות וצבע.
+
+4. משלמים
+משלמים לנחמן לפי החבילה שבחרתם – בדיוק המחיר שבמחירון, בלי תוספות.
+
+5. מקבלים סרט מוכן
+מקבלים קובץ מוכן לצפייה ולשיתוף, באיכות עד 4K.</pre></div>
+
+<h2>9. שאלות נפוצות</h2>
+<p>ב-Wix: <b>Add ← Interactive ← FAQ</b> (או "Accordion").</p>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת</div><pre>שאלות נפוצות
+יש שאלות? יש תשובות</pre></div>
+<div class="blk"><div class="lbl">7 שאלות ותשובות</div><pre>כמה זה עולה?
+סרטון בודד עולה ₪20. חבילת 10 סרטונים עולה ₪180, וחבילת 20 סרטונים עולה ₪350 בלבד. החבילות מתאימות במיוחד לעסקים ולמי שמעלה תוכן לרשתות באופן קבוע.
+
+אילו סרטים אפשר לערוך?
+כל סוגי הסרטים – אירועים, רשתות חברתיות, יוטיוב, עסקים, מזכרות ועוד – באורך של עד 30 דקות לסרטון.
+
+הסרט שלי ארוך מחצי שעה, מה עושים?
+צרו קשר ונבדוק יחד – אפשר לחלק לכמה סרטים או למצוא פתרון אחר.
+
+איך שולחים את החומרים?
+אחרי שממלאים את הטופס נחמן חוזר אליכם במייל, ופשוט משיבים עליו עם החומרים. לקבצים גדולים הכי נוח קישור הורדה – Google Drive, WeTransfer או כל שירות שיתוף קבצים אחר.
+
+באיזו איכות אקבל את הסרט?
+עד 4K (אולטרה HD), בהתאם לאיכות החומרים שתשלחו. אפשר לבקש גם קובץ קל יותר לשיתוף ברשתות.
+
+באילו כלים נחמן עובד?
+נחמן משלב כמה כלים ביחד: CapCut, Canva, Clipchamp ו-Google Vids, יחד עם כלי בינה מלאכותית שמזרזים את העבודה ומשפרים את התוצאה.
+
+כמה זמן לוקח לקבל את הסרט?
+תלוי באורך הסרט ובכמות החומרים. כשתשלחו פרטים תקבלו הערכת זמן מדויקת.</pre></div>
+
+<h2>10. צור קשר</h2>
+<div class="blk"><div class="lbl">שורה קטנה + כותרת + טקסט</div><pre>בואו נתחיל
+מוכנים לסרט שלכם?
+משאירים שם ומייל, ומיד מקבלים מייל עם הסבר איך לשלוח את החומרים לסרט.</pre></div>
+<div class="blk"><div class="lbl">כפתור וואצאפ (לקשר לכתובת למטה)</div><pre>לפנייה ישירה בוואצאפ לחצו כאן</pre></div>
+<div class="blk"><div class="lbl">קישור לכפתור הוואצאפ</div><pre>https://katzr.net/a60665</pre></div>
+<div class="blk"><div class="lbl">מייל</div><pre>naftalinahar@gmail.com</pre></div>
+
+<h3>טופס (Add ← Contact &amp; Forms)</h3>
+<div class="blk"><div class="lbl">שדות הטופס</div><pre>שם מלא (חובה)
+אימייל (חובה)
+סוג הסרט (רשימה): אירועים ושמחות / רילס, טיקטוק ושורטס / סרטוני יוטיוב / סרטוני תדמית לעסקים / מצגות תמונות ומזכרות / טיולים וחופשות / הדרכות והרצאות / כל סרט אחר
+חבילה (רשימה): סרטון בודד – ₪20 / חבילת 10 סרטונים – ₪180 / חבילת 20 סרטונים – ₪350
+ספרו לנו על הסרט (טקסט ארוך)
+[כפתור] שליחה</pre></div>
+<div class="blk"><div class="lbl">הודעה אחרי שליחה</div><pre>תודה! הפנייה התקבלה. שלחנו לכם מייל עם הסבר איך לשלוח את החומרים (בדקו גם בספאם).</pre></div>
+
+<h3>מייל אוטומטי ללקוח</h3>
+<p>ב-Wix: בהגדרות הטופס ← <b>Automations</b> (או "Submit Settings") ← <b>Send a confirmation email to the visitor</b>.</p>
+<div class="blk"><div class="lbl">נושא</div><pre>תודה שפניתם לנחמן הפקות</pre></div>
+<div class="blk"><div class="lbl">תוכן המייל</div><pre>שלום! 👋
+תודה שפניתם לנחמן הפקות!
+
+כדי שנוכל להתחיל לערוך, שלחו לנו את החומרים לסרט למייל naftalinahar@gmail.com:
+• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)
+• מוזיקה, אם יש שיר מסוים שאתם רוצים
+• טקסטים, כתוביות או שמות שצריכים להופיע
+• כל הערה על הסגנון שאתם רוצים
+
+ספרו לנו גם מה הייתם רוצים שיהיה בסרט – ככל שנדע יותר, הסרט ייצא מדויק יותר.
+
+תודה רבה שבחרתם בנו!
+נחמן
+נחמן הפקות 🎬</pre></div>
+
+<h2>11. תחתית האתר</h2>
+<div class="blk"><div class="lbl">טקסט ליד הלוגו</div><pre>עריכת סרטים לכל מטרה, עד חצי שעה, במחיר הכי זול שיש.</pre></div>
+<div class="blk"><div class="lbl">יצירת קשר</div><pre>📞 058-448-8148
+naftalinahar@gmail.com
+לפנייה ישירה בוואצאפ לחצו כאן</pre></div>
+<div class="blk"><div class="lbl">שורה תחתונה</div><pre>© 2026 נחמן הפקות · Nachman Productions</pre></div>
+
+</div>
+<script>
+document.querySelectorAll('.blk').forEach(function (b) {
+	var btn = document.createElement('button');
+	btn.type = 'button';
+	btn.textContent = 'העתקה';
+	btn.addEventListener('click', function () {
+		var text = b.querySelector('pre').innerText;
+		var done = function () { btn.textContent = 'הועתק ✓'; setTimeout(function () { btn.textContent = 'העתקה'; }, 1500); };
+		if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done, function () { window.prompt('העתיקו:', text); }); }
+		else { window.prompt('העתיקו:', text); }
+	});
+	b.appendChild(btn);
+});
+</script>
+</body>
+</html>
