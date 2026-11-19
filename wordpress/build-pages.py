@@ -47,14 +47,14 @@ PAGES_JS = """/* Contact form via FormSubmit: submit without leaving the page. *
 
 
 AUTORESPONSE = (
-    "תודה שפניתם לנחמן הפקות! קיבלנו את הבקשה שלכם לעריכת סרט.\n\n"
-    "כדי שנוכל להתחיל, שלחו לנו את החומרים לסרט למייל {email}:\n"
-    "• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n"
+    "שלום! תודה שפניתם לנחמן הפקות!\n"
+    "בשביל שנוכל להתחיל לערוך בבקשה תענו לנו עם סרטונים ותמונות\n"
     "• מוזיקה, אם יש שיר מסוים שרוצים\n"
     "• טקסטים, כתוביות או שמות שצריכים להופיע\n"
-    "• כל הערה על הסגנון שאתם רוצים\n\n"
-    "נחזור אליכם בהקדם,\n"
-    "נחמן הפקות"
+    "• כל הערה על הסגנון שאתם רוצים\n"
+    "תודה רבה שבחרתם בנו!\n"
+    "אנא שלחו מה הייתם רוצים שיהיה באתר.\n"
+    "נחמן"
 )
 
 
@@ -78,7 +78,7 @@ def convert(html, email):
         '<input type="hidden" name="_captcha" value="false">'
         # FormSubmit emails this text to the address in the form's "email" field.
         '<input type="hidden" name="_autoresponse" value="'
-        + AUTORESPONSE.format(email=email).replace("\n", "&#10;") + '">',
+        + AUTORESPONSE.replace("\n", "&#10;") + '">',
     )
     html = html.replace(
         "משאירים שם ומייל, ונחמן יחזור אליכם במייל עם כל הפרטים.",
