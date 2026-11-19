@@ -31,3 +31,4 @@
 - הפעלה (פעם אחת): ב-GitHub, בריפו, Settings ← Pages ← Deploy from a branch. בוחרים את הענף ואת התיקייה `/docs`, ולוחצים Save.
 - הכתובת: https://naftalinahar-maker.github.io/AI-tool-creator/
 - הטופס עובד דרך EmailJS, שמחובר לג'ימייל של נחמן: הלקוח מקבל מייל אוטומטי, ונחמן מקבל עותק עם פרטי הפנייה (Bcc). את התבנית עורכים ב-emailjs.com, תחת Email Templates.
+- סרטוני הדוגמה המצולמים לאורך שמורים ב-`pages-media/videos/`. אחרי בנייה של `docs/` מריצים `python3 wordpress/add-reels.py docs pages-media` כדי להוסיף אותם לאתר.
