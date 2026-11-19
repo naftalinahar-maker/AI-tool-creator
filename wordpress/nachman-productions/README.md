@@ -30,4 +30,4 @@
 עותק נוסף של האתר נמצא בתיקייה `docs/`. הוא נבנה מ-`netlify-site/` בעזרת `wordpress/build-pages.py`.
 - הפעלה (פעם אחת): ב-GitHub, בריפו, Settings ← Pages ← Deploy from a branch. בוחרים את הענף ואת התיקייה `/docs`, ולוחצים Save.
 - הכתובת: https://naftalinahar-maker.github.io/AI-tool-creator/
-- הטופס עובד דרך FormSubmit. בפנייה הראשונה מגיע מייל אישור, וצריך ללחוץ בו על Activate.
+- הטופס עובד דרך EmailJS, שמחובר לג'ימייל של נחמן: הלקוח מקבל מייל אוטומטי, ונחמן מקבל עותק עם פרטי הפנייה (Bcc). את התבנית עורכים ב-emailjs.com, תחת Email Templates.

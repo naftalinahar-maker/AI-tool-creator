@@ -2,8 +2,9 @@
 """Turn the Netlify build (netlify-site/) into a GitHub Pages build (docs/).
 
 GitHub Pages serves the site from a sub-path (/AI-tool-creator/), so asset paths
-become relative, and it has no form backend, so the contact form posts to
-FormSubmit (https://formsubmit.co), which emails each submission.
+become relative, and it has no form backend, so the contact form sends through EmailJS
+(https://www.emailjs.com) using Nachman's Gmail: one template mails the customer
+the auto-reply and BCCs Nachman with the request details.
 
 Usage: python3 build-pages.py <netlify-site-dir> <out-dir> <form-email>
 """
@@ -12,56 +13,57 @@ import shutil
 import sys
 from pathlib import Path
 
-PAGES_JS = """/* Contact form via FormSubmit: submit without leaving the page. */
+EMAILJS = {
+    "service_id": "service_z6dgkxh",
+    "template_id": "template_61bgmms",
+    "public_key": "JSZhl2EYIvZx-tkI7",
+}
+
+PAGES_JS = """/* Contact form via EmailJS (sends from Nachman's Gmail). */
 (function () {
 	'use strict';
 	var form = document.querySelector('form[name="contact"]');
 	if (!form) return;
 	var ok = document.getElementById('form-ok');
 	var err = document.getElementById('form-err');
-	if (/[?&]np_sent=1/.test(location.search)) ok.hidden = false;
 
 	form.addEventListener('submit', function (e) {
-		if (!window.fetch || !window.FormData) return;
 		e.preventDefault();
+		var data = new FormData(form);
 		var btn = form.querySelector('button[type="submit"]');
-		btn.disabled = true;
 		ok.hidden = true; err.hidden = true;
-		fetch(form.getAttribute('data-ajax'), {
+		var show = function (el) { el.hidden = false; el.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+		if (data.get('np_website')) { form.reset(); show(ok); return; } // bot honeypot
+		btn.disabled = true;
+		fetch('https://api.emailjs.com/api/v1.0/email/send', {
 			method: 'POST',
-			headers: { 'Accept': 'application/json' },
-			body: new FormData(form)
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				service_id: form.getAttribute('data-service'),
+				template_id: form.getAttribute('data-template'),
+				user_id: form.getAttribute('data-key'),
+				template_params: {
+					name: data.get('name') || '',
+					email: data.get('email') || '',
+					film_type: data.get('film_type') || '—',
+					'package': data.get('package') || '—',
+					message: data.get('message') || '—'
+				}
+			})
 		}).then(function (r) {
 			if (!r.ok) throw new Error(r.status);
 			form.reset();
-			ok.hidden = false;
+			show(ok);
 		}).catch(function () {
-			err.hidden = false;
+			show(err);
 		}).then(function () {
 			btn.disabled = false;
-			(ok.hidden ? err : ok).scrollIntoView({ block: 'center', behavior: 'smooth' });
 		});
 	});
 })();
 """
 
 
-AUTORESPONSE = (
-    "שלום! 👋\n"
-    "תודה שפניתם לנחמן הפקות!\n\n"
-    "כדי שנוכל להתחיל לערוך, שלחו לנו את החומרים לסרט למייל {email}:\n"
-    "• סרטונים ותמונות (לקבצים גדולים: קישור Google Drive או WeTransfer)\n"
-    "• מוזיקה, אם יש שיר מסוים שאתם רוצים\n"
-    "• טקסטים, כתוביות או שמות שצריכים להופיע\n"
-    "• כל הערה על הסגנון שאתם רוצים\n\n"
-    "ספרו לנו גם מה הייתם רוצים שיהיה בסרט – ככל שנדע יותר, הסרט ייצא מדויק יותר.\n\n"
-    "תודה רבה שבחרתם בנו!\n"
-    "נחמן\n"
-    "נחמן הפקות 🎬"
-)
-
-
-SITE_URL = "https://naftalinahar-maker.github.io/AI-tool-creator/"
 
 
 def convert(html, email):
@@ -71,23 +73,17 @@ def convert(html, email):
     html = html.replace("--hero-img:url('assets/", "--hero-img:url('../")
     html = html.replace('href="/#', 'href="#').replace('href="/"', 'href="./"')
 
-    # Form: Netlify Forms -> FormSubmit.
+    # Form: Netlify Forms -> EmailJS (handled by pages-form.js). Without JavaScript,
+    # the form falls back to opening the visitor's email app.
     html = re.sub(
         r'<form class="form" name="contact"[^>]*>',
-        f'<form class="form" name="contact" method="POST" action="https://formsubmit.co/{email}" '
-        f'data-ajax="https://formsubmit.co/ajax/{email}">',
+        f'<form class="form" name="contact" method="POST" action="mailto:{email}" enctype="text/plain" '
+        f'data-service="{EMAILJS["service_id"]}" data-template="{EMAILJS["template_id"]}" '
+        f'data-key="{EMAILJS["public_key"]}">',
         html,
     )
-    html = html.replace(
-        '<input type="hidden" name="form-name" value="contact">',
-        '<input type="hidden" name="_template" value="table">'
-        '<input type="hidden" name="_captcha" value="false">'
-        # Without JavaScript the browser posts the form normally; come back to the site afterwards.
-        '<input type="hidden" name="_next" value="' + SITE_URL + '?np_sent=1#contact">'
-        # FormSubmit emails this text to the address in the form's "email" field.
-        '<input type="hidden" name="_autoresponse" value="'
-        + AUTORESPONSE.format(email=email).replace("\n", "&#10;") + '">',
-    )
+    html = html.replace('<input type="hidden" name="form-name" value="contact">', "")
+    html = re.sub(r'<input type="hidden" name="subject"[^>]*>\s*', "", html)
     html = html.replace(
         "משאירים שם ומייל, ונחמן יחזור אליכם במייל עם כל הפרטים.",
         "משאירים שם ומייל, ומיד מקבלים מייל עם הסבר איך לשלוח את החומרים לסרט.",
@@ -96,8 +92,10 @@ def convert(html, email):
         "תודה! הפנייה התקבלה, ונחמן יחזור אליכם במייל בהקדם.",
         "תודה! הפנייה התקבלה. שלחנו לכם מייל עם הסבר איך לשלוח את החומרים (בדקו גם בספאם).",
     )
-    html = html.replace('name="subject"', 'name="_subject"')
-    html = html.replace('name="np_website"', 'name="_honey"')
+    html = html.replace(
+        "משהו השתבש בשליחה. נסו שוב בעוד רגע.",
+        "משהו השתבש בשליחה. נסו שוב, או כתבו לנו ישירות ל-" + email + ".",
+    )
     html = html.replace("netlify-form.js", "pages-form.js")
     return html
 
