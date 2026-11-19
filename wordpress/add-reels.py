@@ -8,6 +8,8 @@ of the "סרטונים לדוגמה" section.
 
 Usage: python3 add-reels.py <site-dir> <media-dir>
 """
+import html
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -21,6 +23,14 @@ def main(site, media):
         print("no videos in", src)
         return
 
+    titles = {}
+    tfile = src / "titles.txt"
+    if tfile.is_file():
+        for line in tfile.read_text(encoding="utf-8").splitlines():
+            if "|" in line and not line.lstrip().startswith("#"):
+                name, title = (x.strip() for x in line.split("|", 1))
+                titles[name] = title
+
     dest = site / "videos"
     dest.mkdir(exist_ok=True)
     cards = []
@@ -31,10 +41,13 @@ def main(site, media):
         if poster.is_file():
             shutil.copy2(poster, dest / poster.name)
             poster_attr = f' poster="videos/{poster.name}"'
+        title = titles.get(v.name, "")
+        caption = f'<figcaption class="reel__title">{html.escape(title)}</figcaption>' if title else ""
+        label = html.escape(title or "סרטון לדוגמה", quote=True)
         cards.append(
             '\t\t\t\t<figure class="reel reveal">'
-            f'<video src="videos/{v.name}"{poster_attr} controls playsinline preload="none"></video>'
-            "</figure>"
+            f'<div class="reel__frame"><video src="videos/{v.name}"{poster_attr} controls playsinline preload="none" aria-label="{label}"></video></div>'
+            f"{caption}</figure>"
         )
 
     block = (
@@ -42,13 +55,15 @@ def main(site, media):
     )
 
     index = site / "index.html"
-    html = index.read_text(encoding="utf-8")
-    start = html.index('id="videos"')
-    end = html.index("</section>", start)
+    page = index.read_text(encoding="utf-8")
+    # Idempotent: drop a reels block from an earlier run.
+    page = re.sub(r'\t*<div class="reels">.*?\n\t*</div>\n', "", page, flags=re.S)
+    start = page.index('id="videos"')
+    end = page.index("</section>", start)
     # Insert just before the section's container closes.
-    close = html.rindex("\t\t</div>\n\t</section>", start, end + len("</section>"))
-    html = html[:close] + block + html[close:]
-    index.write_text(html, encoding="utf-8")
+    close = page.rindex("\t\t</div>\n\t</section>", start, end + len("</section>"))
+    page = page[:close] + block + page[close:]
+    index.write_text(page, encoding="utf-8")
     print(f"added {len(videos)} reels to {index}")
 
 
