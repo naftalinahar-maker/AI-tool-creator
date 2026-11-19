@@ -315,6 +315,28 @@ $np_faq = array(
 		</div>
 	</section>
 
+	<?php $np_promo = np_videos( 'np_promo' ); ?>
+	<?php if ( $np_promo ) : ?>
+	<!-- PROMO -->
+	<section class="section" id="promo">
+		<div class="container">
+			<header class="section__head promo__head">
+				<p class="eyebrow">הפרסומת של נחמן הפקות</p>
+				<h2 class="section__title">עדיין לא <span class="text-fire">משוכנעים?</span></h2>
+				<p class="section__lead">תצפו בסרטון, ותבינו למה כדאי לעבוד איתנו.</p>
+			</header>
+			<div class="videos videos--single">
+				<figure class="video reveal">
+					<div class="video__frame">
+						<iframe src="<?php echo esc_url( $np_promo[0][0] ); ?>" title="<?php echo esc_attr( $np_promo[0][1] ? $np_promo[0][1] : 'נחמן הפקות – פרסומת' ); ?>" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+					</div>
+				</figure>
+			</div>
+			<p class="promo__cta"><a class="btn btn--fire" href="#contact">שכנעתם אותי – הזמינו עריכה</a></p>
+		</div>
+	</section>
+	<?php endif; ?>
+
 </main>
 
 <?php

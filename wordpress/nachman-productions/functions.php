@@ -141,9 +141,9 @@ function np_wa_icon( $size = 44 ) {
  * Sample videos from the Customizer: one per line, "URL | title".
  * Returns [ [embed_url, title], ... ] for Google Drive and YouTube links.
  */
-function np_videos() {
+function np_videos( $key = 'np_videos' ) {
 	$out = array();
-	foreach ( preg_split( '/\r\n|\r|\n/', (string) np_opt( 'np_videos' ) ) as $line ) {
+	foreach ( preg_split( '/\r\n|\r|\n/', (string) np_opt( $key ) ) as $line ) {
 		$parts = array_map( 'trim', explode( '|', $line, 2 ) );
 		$url   = $parts[0];
 		$title = isset( $parts[1] ) ? $parts[1] : '';
