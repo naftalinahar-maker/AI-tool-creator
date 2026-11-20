@@ -102,8 +102,8 @@ $np_faq = array(
 	<section class="section section--dark" id="about">
 		<div class="container about">
 			<div class="about__media reveal">
-				<?php $np_photo = np_opt( 'np_about_photo' ) ? np_opt( 'np_about_photo' ) : get_template_directory_uri() . '/assets/img/nachman.jpg?v=3'; ?>
-				<img class="about__photo" src="<?php echo esc_url( $np_photo ); ?>" alt="נחמן פומברג" width="672" height="1043" loading="lazy">
+				<?php $np_photo = np_opt( 'np_about_photo' ) ? np_opt( 'np_about_photo' ) : get_template_directory_uri() . '/assets/img/nachman.jpg?v=4'; ?>
+				<img class="about__photo" src="<?php echo esc_url( $np_photo ); ?>" alt="נחמן פומברג" width="588" height="1043" loading="lazy">
 				<span class="about__tag">Nachman Productions</span>
 			</div>
 			<div class="about__body">
