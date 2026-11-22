@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 EMAILJS = {
-    "service_id": "service_z6dgkxh",
+    "service_id": "service_9k96q5p",
     "template_id": "template_61bgmms",
     "public_key": "JSZhl2EYIvZx-tkI7",
 }
