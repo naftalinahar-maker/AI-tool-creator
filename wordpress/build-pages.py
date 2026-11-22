@@ -16,7 +16,7 @@ from pathlib import Path
 EMAILJS = {
     "service_id": "service_z6dgkxh",
     "template_id": "template_61bgmms",
-    "public_key": "JSZhl2EYIvZx-tkI7",
+    "public_key": "JI8U8XBdhgaZi4hVj",
 }
 
 PAGES_JS = """/* Contact form via EmailJS (sends from Nachman's Gmail). */
