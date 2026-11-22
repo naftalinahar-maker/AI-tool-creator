@@ -51,10 +51,13 @@ PAGES_JS = """/* Contact form via EmailJS (sends from Nachman's Gmail). */
 				}
 			})
 		}).then(function (r) {
-			if (!r.ok) throw new Error(r.status);
-			form.reset();
-			show(ok);
-		}).catch(function () {
+			if (r.ok) { form.reset(); show(ok); return; }
+			return r.text().then(function (t) { throw new Error(r.status + ' ' + t); });
+		}).catch(function (e) {
+			// Show EmailJS's reason so problems can be diagnosed.
+			var why = err.querySelector('.form__why');
+			if (!why) { why = document.createElement('small'); why.className = 'form__why'; why.style.display = 'block'; why.style.direction = 'ltr'; why.style.marginTop = '6px'; err.appendChild(why); }
+			why.textContent = String(e && e.message || e);
 			show(err);
 		}).then(function () {
 			btn.disabled = false;
