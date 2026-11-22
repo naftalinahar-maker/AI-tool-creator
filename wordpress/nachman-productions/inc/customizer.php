@@ -29,7 +29,7 @@ function np_defaults() {
 		'np_tiktok'          => '',
 		'np_youtube'         => '',
 		'np_facebook'        => '',
-		'np_videos'          => "https://drive.google.com/file/d/1VG1rvZA35UCtomx29U9ZYCb8sYqqtK46/view | יום הולדת 40 לאמא!",
+		'np_videos'          => "https://drive.google.com/file/d/1VG1rvZA35UCtomx29U9ZYCb8sYqqtK46/view",
 		'np_promo'           => "https://drive.google.com/file/d/1TPuBY3tcOf6Ol8u_ZHBmUOjx4ZeAkGKd/view | נחמן הפקות – פרסומת",
 		'np_about_title'     => 'היי, אני נחמן פומברג 👋',
 		'np_about'           => "אני בן 10, הבן של נפתלי ותהילה פומברג, ואני עורך סרטים כבר שנה. בשנה הזאת ערכתי יותר מ-60 סרטים, ולמדתי מכל אחד מהם משהו חדש.\n\nאני מאמין שלכל אחד מגיע סרט ערוך ויפה, בלי לשלם על זה הון. בגלל זה המחירים שלי נמוכים במיוחד, אבל ההשקעה בכל סרט היא מלאה.\n\nאני עובד עם ארבעה כלי עריכה ביחד, ומשלב בינה מלאכותית בכל עריכה. ככה אני עובד מהר, שומר על איכות של עד 4K, ויכול להציע מחירים שקשה להאמין להם.\n\nכל סרט שמגיע אליי מקבל יחס אישי: אני מקשיב למה שאתם רוצים, ועורך אותו כאילו הוא שלי.",
