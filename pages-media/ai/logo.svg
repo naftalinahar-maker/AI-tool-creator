@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="נחמן AI">
+  <defs>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff8a1f"/><stop offset=".5" stop-color="#8b5cf6"/><stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="90" fill="#0d1022"/>
+  <circle cx="100" cy="100" r="82" fill="none" stroke="url(#ring)" stroke-width="12"/>
+  <path d="M62 145V58l76 87V58" fill="none" stroke="#eef1ff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#22d3ee"><circle cx="62" cy="58" r="11"/><circle cx="138" cy="145" r="11"/></g>
+  <g fill="#ff8a1f"><circle cx="62" cy="145" r="9"/><circle cx="138" cy="58" r="9"/></g>
+</svg>

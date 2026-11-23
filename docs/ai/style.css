@@ -50,7 +50,7 @@ p { margin: 0 0 1em; }
 .top::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(7, 8, 18, .8); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .top__in { display: flex; align-items: center; justify-content: space-between; min-height: 72px; gap: 20px; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--text); }
-.brand__mark { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: var(--btn); color: #06071a; font: 900 17px/1 var(--body); }
+.brand__logo { width: 44px; height: 44px; flex: none; filter: drop-shadow(0 0 12px rgba(139, 92, 246, .5)); }
 .brand__name { font-family: var(--head); font-size: 22px; }
 .brand__name b { font-weight: 400; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .nav { display: flex; align-items: center; gap: 24px; }
