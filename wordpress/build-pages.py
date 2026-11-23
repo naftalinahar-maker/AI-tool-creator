@@ -112,6 +112,10 @@ def main(src, out, email):
     (out / "assets" / "js" / "netlify-form.js").unlink(missing_ok=True)
     (out / "assets" / "js" / "pages-form.js").write_text(PAGES_JS, encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
+    # Extra static sites kept outside docs/ (docs/ is rebuilt from scratch), e.g. the AI courses site.
+    extra = Path(__file__).resolve().parent.parent / "pages-media" / "ai"
+    if extra.is_dir():
+        shutil.copytree(extra, out / "ai")
     for page in ("index.html", "404.html"):
         p = out / page
         p.write_text(convert(p.read_text(encoding="utf-8"), email), encoding="utf-8")
