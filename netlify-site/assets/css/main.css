@@ -324,9 +324,9 @@ p { margin: 0 0 1em; }
 
 /* ---------- About ---------- */
 /* Same layout at every width: photo beside the heading and text (top-aligned), facts and button full width below. */
-.about { display: grid; grid-template-columns: 34% 1fr; grid-template-rows: auto auto 1fr; gap: 18px 56px; align-items: start; }
+.about { display: grid; grid-template-columns: 34% 1fr; grid-template-rows: auto auto auto 1fr; gap: 18px 56px; align-items: start; }
 .about__body { display: contents; }
-.about__media { grid-column: 1; grid-row: 1 / span 3; }
+.about__media { grid-column: 1; grid-row: 1 / span 4; }
 .about__body > .eyebrow, .about__body > .section__title, .about__body > .about__text { grid-column: 2; }
 .about__body > .eyebrow { margin: 0; }
 .about__body > .section__title { margin: 0; }
@@ -511,3 +511,11 @@ p { margin: 0 0 1em; }
 /* About photo: show the whole image (no crop) and no overlay tag. */
 .about__photo { aspect-ratio: auto; height: auto; object-fit: contain; }
 .about__tag { display: none; }
+
+/* P.S. link to the AI courses site */
+.about__ps { margin: 4px 0 0; padding: 12px 16px; border-radius: 14px; font-size: 16px; color: #e6dcd3;
+	background: rgba(139, 92, 246, .1); border: 1px dashed rgba(139, 92, 246, .5); }
+.about__ps a { font-weight: 700; color: #a78bfa; }
+.about__ps a:hover { color: #22d3ee; }
+.about__body > .about__ps { grid-column: 2; }
+@media (max-width: 900px) { .about__body > .about__ps { font-size: 14px; } }
