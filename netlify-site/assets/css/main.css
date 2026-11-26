@@ -512,10 +512,3 @@ p { margin: 0 0 1em; }
 .about__photo { aspect-ratio: auto; height: auto; object-fit: contain; }
 .about__tag { display: none; }
 
-/* P.S. link to the AI courses site */
-.about__ps { margin: 4px 0 0; padding: 12px 16px; border-radius: 14px; font-size: 16px; color: #e6dcd3;
-	background: rgba(139, 92, 246, .1); border: 1px dashed rgba(139, 92, 246, .5); }
-.about__ps a { font-weight: 700; color: #a78bfa; }
-.about__ps a:hover { color: #22d3ee; }
-.about__body > .about__ps { grid-column: 2; }
-@media (max-width: 900px) { .about__body > .about__ps { font-size: 14px; } }

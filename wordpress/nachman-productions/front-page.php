@@ -110,7 +110,6 @@ $np_faq = array(
 				<p class="eyebrow">מי אני</p>
 				<h2 class="section__title"><?php echo esc_html( np_opt( 'np_about_title' ) ); ?></h2>
 				<div class="about__text"><?php echo wp_kses_post( wpautop( np_opt( 'np_about' ) ) ); ?></div>
-				<p class="about__ps">נ.ב. אני מלמד גם קורסים בבינה מלאכותית! 🧠 <a href="https://naftalinahar-maker.github.io/AI-tool-creator/ai/">הכירו את נחמן AI ←</a></p>
 				<ul class="about__facts">
 					<li><strong>+60</strong><span>סרטים ערוכים</span></li>
 					<li><strong>שנה</strong><span>של ניסיון</span></li>
